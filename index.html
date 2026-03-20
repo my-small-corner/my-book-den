@@ -35,9 +35,9 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-  /* ── API SETUP SCREEN ── */
+  /* ── SETUP SCREEN ── */
   #setup-screen {
     display: none;
     position: fixed;
@@ -57,141 +57,71 @@
     width: 90%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.8);
   }
-  .setup-box h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    color: var(--accent-bright);
-    margin-bottom: 8px;
-  }
-  .setup-box .setup-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  .setup-box p {
-    font-size: 0.88rem;
-    color: var(--text-dim);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
+  .setup-box h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--accent-bright); margin-bottom: 8px; }
+  .setup-sub { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; }
+  .setup-box p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; }
   .setup-box p strong { color: var(--text); }
   .setup-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    padding: 12px 14px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
+    width: 100%; background: var(--surface2); border: 1px solid var(--border2);
+    border-radius: 6px; padding: 12px 14px; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 0.78rem; outline: none;
+    transition: border-color 0.2s; margin-bottom: 10px; letter-spacing: 0.5px;
   }
   .setup-input:focus { border-color: var(--accent); }
   .setup-input::placeholder { color: var(--text-muted); }
   .setup-btn {
-    width: 100%;
-    background: var(--accent);
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    color: var(--bg);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    font-weight: 500;
-    cursor: pointer;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: background 0.2s;
-    margin-bottom: 14px;
+    width: 100%; background: var(--accent); border: none; border-radius: 6px;
+    padding: 12px; color: var(--bg); font-family: 'DM Mono', monospace;
+    font-size: 0.8rem; font-weight: 500; cursor: pointer; letter-spacing: 1.5px;
+    text-transform: uppercase; transition: background 0.2s; margin-bottom: 14px;
   }
   .setup-btn:hover { background: var(--accent-bright); }
-  .setup-note {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    padding: 12px;
-    background: var(--surface2);
-    border-radius: 6px;
-    border-left: 2px solid var(--accent-dim);
-  }
-  .setup-error {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--stopped);
-    margin-bottom: 10px;
-    display: none;
-  }
-
-  /* ── KEY INDICATOR (top right when key is set) ── */
-  .key-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 5px 10px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    transition: all 0.2s;
-  }
-  .key-indicator:hover { border-color: var(--border2); color: var(--text-dim); }
-  .key-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .setup-note { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-muted); line-height: 1.6; padding: 12px; background: var(--surface2); border-radius: 6px; border-left: 2px solid var(--accent-dim); }
+  .setup-error { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--stopped); margin-bottom: 10px; display: none; }
 
   /* ── HEADER ── */
   header {
-    padding: 20px 28px 16px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between; background: var(--header-bg);
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--header-bg); flex-shrink: 0;
   }
   .header-left { display: flex; align-items: baseline; gap: 14px; }
-  header h1 { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 900; color: var(--accent-bright); letter-spacing: -0.5px; }
-  header .subtitle { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2.5px; text-transform: uppercase; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--accent-bright); letter-spacing: -0.5px; }
+  header .subtitle { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
   .header-right { display: flex; align-items: center; gap: 10px; }
-
-  .edit-toggle {
-    display: flex; align-items: center; gap: 8px;
-    font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted);
-    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
-    padding: 7px 14px; border: 1px solid var(--border2); border-radius: 5px;
-    background: var(--surface2); transition: all 0.2s; user-select: none;
-  }
+  .key-indicator { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-muted); cursor: pointer; padding: 5px 10px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s; }
+  .key-indicator:hover { border-color: var(--border2); color: var(--text-dim); }
+  .key-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .edit-toggle { display: flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; padding: 7px 14px; border: 1px solid var(--border2); border-radius: 5px; background: var(--surface2); transition: all 0.2s; user-select: none; }
   .edit-toggle:hover { border-color: var(--accent-dim); color: var(--accent); }
   .edit-toggle.active { border-color: var(--accent); color: var(--accent-bright); background: var(--read-bg); }
   .edit-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); transition: background 0.2s; }
   .edit-toggle.active .edit-dot { background: var(--accent-bright); box-shadow: 0 0 6px var(--accent); }
 
   /* ── LAYOUT ── */
-  .layout { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 65px); }
+  .layout { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 61px); }
 
   /* ── SIDEBAR ── */
-  .author-sidebar { width: 200px; min-width: 200px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-  .sidebar-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); padding: 16px 16px 8px; }
-  .author-btn { display: block; width: 100%; text-align: left; padding: 11px 16px; background: none; border: none; border-left: 3px solid transparent; color: var(--text-dim); font-family: 'Playfair Display', serif; font-size: 0.93rem; cursor: pointer; transition: all 0.18s; }
+  .author-sidebar { width: 190px; min-width: 190px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+  .sidebar-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); padding: 14px 14px 8px; }
+  .author-btn { display: block; width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; border-left: 3px solid transparent; color: var(--text-dim); font-family: 'Playfair Display', serif; font-size: 0.9rem; cursor: pointer; transition: all 0.18s; }
   .author-btn:hover { color: var(--text); background: var(--surface2); }
   .author-btn.active { color: var(--accent-bright); border-left-color: var(--accent); background: var(--surface2); }
-  .author-btn small { display: block; font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-muted); margin-top: 2px; }
+  .author-btn small { display: block; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-muted); margin-top: 2px; }
   .sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
 
   /* ── BOOK PANEL ── */
-  .book-panel { flex: 1; overflow-y: auto; padding: 22px 26px; }
-  .series-block { margin-bottom: 30px; }
-  .series-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 7px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-  .series-count { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-muted); background: var(--surface2); padding: 2px 8px; border-radius: 10px; letter-spacing: 1px; }
-  .book-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 5px; margin-bottom: 3px; cursor: pointer; transition: background 0.12s; border: 1px solid transparent; position: relative; }
+  .book-panel { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .series-block { margin-bottom: 28px; }
+  .series-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 7px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .series-count { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-muted); background: var(--surface2); padding: 2px 8px; border-radius: 10px; }
+  .book-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 5px; margin-bottom: 3px; cursor: pointer; transition: background 0.12s; border: 1px solid transparent; position: relative; }
   .book-item:hover { background: var(--surface2); border-color: var(--border); }
   .book-item.selected { background: var(--surface2); border-color: var(--accent-dim); }
-  .book-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); width: 22px; flex-shrink: 0; }
-  .book-title { flex: 1; font-size: 0.9rem; color: var(--text); }
+  .book-num { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--text-muted); width: 22px; flex-shrink: 0; }
+  .book-title { flex: 1; font-size: 0.88rem; color: var(--text); }
   .book-title.notowned { color: var(--text-muted); font-style: italic; }
-  .status-badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; }
+  .status-badge { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; }
   .badge-read     { background: var(--read-bg);     color: var(--read); }
   .badge-unread   { background: var(--unread-bg);   color: var(--unread); }
   .badge-notowned { background: var(--notowned-bg); color: var(--notowned); border: 1px solid var(--border2); }
@@ -200,86 +130,124 @@
   .badge-notfound { background: var(--notfound-bg); color: var(--notfound); }
   .edit-mode .status-badge { cursor: pointer; outline: 1px dashed var(--accent-dim); }
   .edit-mode .status-badge:hover { outline-color: var(--accent); }
-  .status-menu { position: absolute; right: 10px; top: 38px; background: var(--surface3); border: 1px solid var(--border2); border-radius: 6px; z-index: 200; min-width: 155px; box-shadow: 0 8px 28px rgba(0,0,0,0.7); overflow: hidden; }
-  .status-menu-item { padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: background 0.1s; display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
+  .status-menu { position: absolute; right: 10px; top: 36px; background: var(--surface3); border: 1px solid var(--border2); border-radius: 6px; z-index: 200; min-width: 155px; box-shadow: 0 8px 28px rgba(0,0,0,0.7); overflow: hidden; }
+  .status-menu-item { padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 0.7rem; cursor: pointer; transition: background 0.1s; display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
   .status-menu-item:hover { background: var(--surface2); color: var(--text); }
   .status-menu-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
   /* ── RIGHT PANEL ── */
-  .right-panel { width: 310px; min-width: 310px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .stats-bar { padding: 14px 18px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .stat-item { text-align: center; }
-  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; line-height: 1; }
-  .stat-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
-  .book-detail { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); min-height: 115px; }
-  .book-detail h2 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--text); margin-bottom: 5px; line-height: 1.3; }
-  .detail-series { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--accent-dim); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; }
-  .detail-note { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; margin-top: 6px; }
-  .no-selection { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-muted); text-align: center; padding: 18px 0; letter-spacing: 1px; }
-  .edit-tip { margin-top: 10px; padding: 8px 10px; background: var(--surface2); border: 1px dashed var(--accent-dim); border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--accent-dim); }
+  .right-panel { width: 340px; min-width: 340px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; }
 
-  /* ── CHAT ── */
-  .chat-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .chat-header { padding: 10px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-  .chat-header span { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
-  .ai-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  .stats-bar { padding: 12px 16px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex-shrink: 0; }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; line-height: 1; }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
+
+  .book-detail { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .book-detail h2 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+  .detail-series { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--accent-dim); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .detail-note { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; margin-top: 5px; }
+  .no-selection { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 16px 0; letter-spacing: 1px; }
+  .edit-tip { margin-top: 8px; padding: 7px 10px; background: var(--surface2); border: 1px dashed var(--accent-dim); border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--accent-dim); }
+
+  /* ── CHAT — bigger and fully interactive ── */
+  .chat-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+
+  .chat-header { padding: 10px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .chat-header span { font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+  .ai-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
   .ai-dot.offline { background: var(--text-muted); animation: none; }
   @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-  .quick-asks { padding: 8px 14px 0; display: flex; flex-wrap: wrap; gap: 5px; }
-  .quick-btn { background: var(--surface2); border: 1px solid var(--border2); border-radius: 4px; padding: 4px 9px; color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; cursor: pointer; transition: all 0.15s; }
+
+  .quick-asks { padding: 8px 12px 6px; display: flex; flex-wrap: wrap; gap: 5px; flex-shrink: 0; }
+  .quick-btn { background: var(--surface2); border: 1px solid var(--border2); border-radius: 4px; padding: 5px 10px; color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; cursor: pointer; transition: all 0.15s; }
   .quick-btn:hover { border-color: var(--accent-dim); color: var(--accent); }
-  .chat-messages { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
-  .msg { padding: 9px 11px; border-radius: 5px; font-size: 0.81rem; line-height: 1.5; animation: fadeIn 0.25s ease; }
+
+  .chat-messages { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .msg { padding: 10px 12px; border-radius: 6px; font-size: 0.83rem; line-height: 1.55; animation: fadeIn 0.25s ease; word-wrap: break-word; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none} }
   .msg-ai { background: var(--surface2); color: var(--text); border-left: 2px solid var(--accent-dim); }
   .msg-user { background: var(--read-bg); color: var(--text-dim); text-align: right; border-right: 2px solid var(--accent-dim); }
-  .chat-input-area { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; gap: 7px; }
-  .chat-input { flex: 1; background: var(--surface2); border: 1px solid var(--border2); border-radius: 4px; padding: 8px 11px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; outline: none; transition: border-color 0.2s; }
-  .chat-input:focus { border-color: var(--accent-dim); }
+
+  /* BIGGER chat input area */
+  .chat-input-area { padding: 12px 14px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; background: var(--surface); }
+  .chat-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    height: 70px;
+    line-height: 1.5;
+    display: block;
+    position: relative;
+    z-index: 10;
+  }
+  .chat-input:focus { border-color: var(--accent); }
   .chat-input::placeholder { color: var(--text-muted); }
-  .send-btn { background: var(--accent); border: none; border-radius: 4px; padding: 8px 13px; color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; cursor: pointer; transition: background 0.2s; letter-spacing: 1px; }
+  .send-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    width: 100%;
+  }
   .send-btn:hover { background: var(--accent-bright); }
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .legend { padding: 8px 16px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 7px; }
-  .legend-item { display: flex; align-items: center; gap: 4px; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; }
-  .legend-dot { width: 7px; height: 7px; border-radius: 2px; }
+
+  .legend { padding: 8px 14px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-family: 'DM Mono', monospace; font-size: 0.56rem; color: var(--text-muted); text-transform: uppercase; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+
   .typing-indicator { display:flex; gap:4px; align-items:center; padding:2px 0; }
   .typing-indicator span { width:6px;height:6px;background:var(--accent-dim);border-radius:50%;animation:bounce 1s infinite; }
   .typing-indicator span:nth-child(2){animation-delay:.15s}.typing-indicator span:nth-child(3){animation-delay:.3s}
   @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
   .save-notice { position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--read-bg);border:1px solid var(--accent-dim);color:var(--accent-bright);font-family:'DM Mono',monospace;font-size:0.72rem;padding:8px 18px;border-radius:20px;letter-spacing:1px;pointer-events:none;opacity:0;transition:opacity 0.3s;z-index:998; }
   .save-notice.show { opacity:1; }
+
   ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 </style>
 </head>
 <body>
 
-<!-- ── SETUP SCREEN ── -->
+<!-- SETUP SCREEN -->
 <div id="setup-screen">
   <div class="setup-box">
     <h2>📚 My Book Tracker</h2>
     <div class="setup-sub">One-time setup</div>
-    <p>To enable the AI chat assistant, enter your <strong>Anthropic API key</strong> below. It will be saved privately in your browser — it never appears in the page code and is never shared with anyone.</p>
-    <p>You only need to do this <strong>once per device/browser</strong>.</p>
+    <p>To enable the AI chat assistant, enter your <strong>Anthropic API key</strong> below. It is saved privately in your browser only — never in the code, never shared.</p>
+    <p>You only need to do this <strong>once per device</strong>.</p>
     <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-api03-..." />
-    <div class="setup-error" id="setup-error">⚠ That doesn't look like a valid key — it should start with sk-ant-</div>
+    <div class="setup-error" id="setup-error">⚠ Key should start with sk-ant-</div>
     <button class="setup-btn" onclick="saveApiKey()">Save & Open My Library</button>
-    <div class="setup-note">
-      🔒 Your key is stored in your browser's localStorage only.<br>
-      It is never sent anywhere except directly to Anthropic's API.<br>
-      To remove it later, click the 🔑 icon in the top right corner.
-    </div>
+    <div class="setup-note">🔒 Stored in your browser's localStorage only. Never sent anywhere except directly to Anthropic's API. Click 🔑 in the top right to remove it.</div>
   </div>
 </div>
 
-<!-- ── MAIN APP ── -->
+<!-- MAIN APP -->
 <header>
   <div class="header-left">
     <h1>📚 My Library</h1>
     <span class="subtitle">Personal Book Tracker</span>
   </div>
   <div class="header-right">
-    <div class="key-indicator" onclick="resetApiKey()" title="Click to change or remove your API key">
+    <div class="key-indicator" id="key-indicator" onclick="resetApiKey()">
       <div class="key-dot" id="key-dot"></div>
       <span id="key-status">🔑 API Key</span>
     </div>
@@ -306,26 +274,38 @@
 
   <div class="right-panel">
     <div class="stats-bar" id="stats-bar"></div>
-    <div class="book-detail" id="book-detail"><div class="no-selection">← Select a book to see details</div></div>
+
+    <div class="book-detail" id="book-detail">
+      <div class="no-selection">← Select a book to see details</div>
+    </div>
+
     <div class="chat-section">
       <div class="chat-header">
         <div class="ai-dot" id="ai-dot"></div>
         <span id="chat-status">Ask about your books</span>
       </div>
+
       <div class="quick-asks">
         <button class="quick-btn" onclick="quickAsk('What should I read next?')">What next?</button>
         <button class="quick-btn" onclick="quickAsk('How many Baldacci books have I read?')">My stats</button>
-        <button class="quick-btn" onclick="quickAsk('What books am I missing from each Baldacci series?')">Series gaps?</button>
+        <button class="quick-btn" onclick="quickAsk('What am I missing from each Baldacci series?')">Series gaps?</button>
         <button class="quick-btn" onclick="quickAsk('Recommend something similar to Baldacci')">Suggestions</button>
       </div>
+
       <div class="chat-messages" id="chat-messages">
-        <div class="msg msg-ai">Hi! I know your full collection. Ask me "Do I have The Hit?", "What should I read next?", or "What WW2 books should I try?" 📖</div>
+        <div class="msg msg-ai">Hi! I know your full collection. Try asking "Do I have The Hit?", "What should I read after The Fix?", or "What WW2 books should I try next?" 📖</div>
       </div>
+
       <div class="chat-input-area">
-        <input class="chat-input" id="chat-input" placeholder="Do I own this book?" onkeydown="if(event.key==='Enter')sendMessage()"/>
-        <button class="send-btn" id="send-btn" onclick="sendMessage()">ASK</button>
+        <textarea
+          class="chat-input"
+          id="chat-input"
+          placeholder="Ask me anything about your books..."
+        ></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">Ask</button>
       </div>
     </div>
+
     <div class="legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--read)"></div>Read</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--unread)"></div>Owned</div>
@@ -340,21 +320,14 @@
 <div class="save-notice" id="save-notice">✓ Saved</div>
 
 <script>
-// ── API KEY MANAGEMENT ────────────────────────────────────────
+// ── API KEY ───────────────────────────────────────────────────
 const API_KEY_STORAGE = 'booktracker_apikey';
-
-function getApiKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || '';
-}
+function getApiKey() { return localStorage.getItem(API_KEY_STORAGE) || ''; }
 
 function saveApiKey() {
-  const input = document.getElementById('api-key-input');
-  const key = input.value.trim();
+  const key = document.getElementById('api-key-input').value.trim();
   const errEl = document.getElementById('setup-error');
-  if (!key.startsWith('sk-ant-')) {
-    errEl.style.display = 'block';
-    return;
-  }
+  if (!key.startsWith('sk-ant-')) { errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
   localStorage.setItem(API_KEY_STORAGE, key);
   hideSetupScreen();
@@ -362,7 +335,7 @@ function saveApiKey() {
 }
 
 function resetApiKey() {
-  if (confirm('Remove your API key from this browser? The AI chat will stop working until you add it again.')) {
+  if (confirm('Remove your API key from this browser?\nThe AI chat will stop working until you add it again.')) {
     localStorage.removeItem(API_KEY_STORAGE);
     document.getElementById('api-key-input').value = '';
     showSetupScreen();
@@ -370,31 +343,15 @@ function resetApiKey() {
   }
 }
 
-function showSetupScreen() {
-  document.getElementById('setup-screen').classList.add('visible');
-}
-
-function hideSetupScreen() {
-  document.getElementById('setup-screen').classList.remove('visible');
-}
+function showSetupScreen() { document.getElementById('setup-screen').classList.add('visible'); }
+function hideSetupScreen() { document.getElementById('setup-screen').classList.remove('visible'); }
 
 function updateKeyIndicator() {
   const hasKey = !!getApiKey();
-  const dot = document.getElementById('key-dot');
-  const status = document.getElementById('key-status');
-  const aiDot = document.getElementById('ai-dot');
-  const chatStatus = document.getElementById('chat-status');
-  if (hasKey) {
-    dot.style.background = 'var(--accent)';
-    status.textContent = '🔑 API Connected';
-    aiDot.classList.remove('offline');
-    chatStatus.textContent = 'Ask about your books';
-  } else {
-    dot.style.background = 'var(--stopped)';
-    status.textContent = '🔑 No API Key';
-    aiDot.classList.add('offline');
-    chatStatus.textContent = 'AI offline — click 🔑 to set up';
-  }
+  document.getElementById('key-dot').style.background = hasKey ? 'var(--accent)' : 'var(--stopped)';
+  document.getElementById('key-status').textContent = hasKey ? '🔑 Connected' : '🔑 No Key';
+  document.getElementById('ai-dot').classList.toggle('offline', !hasKey);
+  document.getElementById('chat-status').textContent = hasKey ? 'Ask about your books' : 'Click 🔑 to set up AI';
 }
 
 // ── BOOK DATA ─────────────────────────────────────────────────
@@ -471,10 +428,10 @@ const defaultLibrary = {
   },
   patterson: {
     author:"James Patterson",
-    note:"Fast-paced crime thrillers, very similar style to Baldacci — easy reads. Wife has Obsessed (#15 Michael Bennett). Recommended to start from Book 1.",
+    note:"Fast-paced crime thrillers, very similar style to Baldacci. Wife has Obsessed (#15). Recommended to start from Book 1.",
     series:[
       { name:"Michael Bennett Series", books:[
-        {num:1,title:"Step on a Crack",status:"notowned",note:"Best place to start — great intro to Bennett"},
+        {num:1,title:"Step on a Crack",status:"notowned",note:"Best place to start"},
         {num:2,title:"Run for Your Life",status:"notowned"},
         {num:3,title:"Worst Case",status:"notowned"},
         {num:4,title:"Tick Tock",status:"notowned"},
@@ -488,7 +445,7 @@ const defaultLibrary = {
         {num:12,title:"Blindside",status:"notowned"},
         {num:13,title:"The Russian",status:"notowned"},
         {num:14,title:"Shattered",status:"notowned"},
-        {num:15,title:"Obsessed",status:"unread",note:"Wife's book — also a decent standalone entry point"},
+        {num:15,title:"Obsessed",status:"unread",note:"Wife's book — decent standalone entry point too"},
         {num:16,title:"Crosshairs",status:"notowned"},
         {num:17,title:"Paranoia",status:"notowned"},
         {num:18,title:"Delusional (2026)",status:"notowned"},
@@ -535,18 +492,18 @@ const defaultLibrary = {
   },
   ww2: {
     author:"WW2 History & Non-Fiction",
-    note:"Loves narrative non-fiction about real WW2 stories — personal, human-driven accounts. The Boys in the Boat style: gripping true stories.",
+    note:"Loves narrative non-fiction about real WW2 stories — personal, human-driven accounts.",
     series:[
       { name:"Read", books:[
         {title:"The Pathfinders",status:"read",note:"By Will Iredale — elite RAF bombers who led raids over occupied Europe"},
         {title:"The Boys in the Boat",status:"read",note:"By Daniel James Brown — US Olympic rowing team defeat Nazi Germany at 1936 Berlin Olympics"},
       ]},
       { name:"Suggested — Similar Style", books:[
-        {title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand — US Olympic runner survives WW2 POW camps. Very similar feel to Boys in the Boat"},
-        {title:"The Splendid and the Vile",status:"notowned",note:"By Erik Larson — Churchill and family during the Blitz. Gripping narrative non-fiction"},
+        {title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand — US Olympic runner survives WW2 POW camps. Very similar to Boys in the Boat"},
+        {title:"The Splendid and the Vile",status:"notowned",note:"By Erik Larson — Churchill and family during the Blitz"},
         {title:"Beneath a Scarlet Sky",status:"notowned",note:"By Mark Sullivan — true story of a young Italian spy helping Jews escape the Nazis"},
         {title:"Dead Wake",status:"notowned",note:"By Erik Larson — sinking of the Lusitania told as a thriller"},
-        {title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell — WW2 strategic bombing campaign, fast and very readable"},
+        {title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell — WW2 strategic bombing, fast and readable"},
       ]},
     ]
   },
@@ -592,7 +549,7 @@ const STATUS = {
   notfound: {label:'Not Found', cls:'badge-notfound', color:'var(--notfound)'},
 };
 
-// ── RENDER ─────────────────────────────────────────────────────
+// ── RENDER ────────────────────────────────────────────────────
 function renderBooks() {
   const data = library[currentAuthor];
   const panel = document.getElementById('book-panel');
@@ -635,7 +592,7 @@ function updateCounts() {
   Object.entries(library).forEach(([key,data])=>{
     let t=0; data.series.forEach(s=>t+=s.books.length);
     const el=document.getElementById('count-'+key);
-    if(el) el.textContent=`${t} books tracked`;
+    if(el) el.textContent=`${t} books`;
   });
 }
 
@@ -709,10 +666,10 @@ function showSaveNotice() {
   setTimeout(()=>el.classList.remove('show'),2200);
 }
 
-// ── AI CHAT ────────────────────────────────────────────────────
+// ── CHAT ──────────────────────────────────────────────────────
 function buildContext() {
   let ctx="You are a friendly personal book assistant. Here is the user's complete library:\n\n";
-  ctx+="READING PROFILE: Loves easy fast-paced thrillers (Baldacci is favourite — 'very easy reads'). Also enjoys WW2 narrative non-fiction (loved The Boys in the Boat and The Pathfinders), epic world-building (Tolkien, Dune), and philosophical classics (loved Fountainhead, couldn't finish Atlas Shrugged).\n\n";
+  ctx+="READING PROFILE: Loves easy fast-paced thrillers (Baldacci is favourite). Also enjoys WW2 narrative non-fiction (loved The Boys in the Boat and The Pathfinders), epic world-building (Tolkien, Dune), philosophical classics (loved Fountainhead, couldn't finish Atlas Shrugged).\n\n";
   Object.entries(library).forEach(([,data])=>{
     ctx+=`AUTHOR: ${data.author}\nProfile: ${data.note}\n`;
     data.series.forEach(s=>{
@@ -721,51 +678,87 @@ function buildContext() {
     });
     ctx+='\n';
   });
-  ctx+=`Status key: READ=finished, UNREAD=owned/not read, NOTOWNED=doesn't own, READING=currently reading, STOPPED=gave up, NOTFOUND=read but book missing.\n`;
-  ctx+=`Be concise and practical. They may be in a shop. Answer ownership questions directly. Match recommendations to their taste profile.`;
+  ctx+=`Status key: READ=finished, UNREAD=owned/not read, NOTOWNED=doesn't own, READING=currently reading, STOPPED=gave up, NOTFOUND=read but book missing.\nBe concise and practical. They may be in a shop.`;
   return ctx;
 }
 
 async function sendMessage() {
-  const apiKey=getApiKey();
-  if(!apiKey){
-    const el=document.getElementById('chat-messages');
-    el.innerHTML+=`<div class="msg msg-ai">⚠ No API key set. Click the 🔑 icon in the top right to add your key.</div>`;
-    el.scrollTop=el.scrollHeight; return;
+  const apiKey = getApiKey();
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+
+  if (!apiKey) {
+    addMessage('ai', '⚠ No API key set. Click the 🔑 icon in the top right corner to add your key.');
+    return;
   }
-  const input=document.getElementById('chat-input');
-  const msg=input.value.trim(); if(!msg) return;
-  input.value='';
-  const el=document.getElementById('chat-messages');
-  el.innerHTML+=`<div class="msg msg-user">${msg}</div>`;
-  const tid='t'+Date.now();
-  el.innerHTML+=`<div class="msg msg-ai" id="${tid}"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
-  el.scrollTop=el.scrollHeight;
-  document.getElementById('send-btn').disabled=true;
+  if (!msg) return;
+
+  input.value = '';
+  addMessage('user', msg);
+
+  const tid = 't' + Date.now();
+  const el = document.getElementById('chat-messages');
+  el.innerHTML += `<div class="msg msg-ai" id="${tid}"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+  el.scrollTop = el.scrollHeight;
+  document.getElementById('send-btn').disabled = true;
+
   try {
-    const res=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:buildContext(),messages:[{role:"user",content:msg}]})
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: buildContext(),
+        messages: [{ role: "user", content: msg }]
+      })
     });
-    const data=await res.json();
-    if(data.error){
-      document.getElementById(tid).textContent=`⚠ API error: ${data.error.message}`;
+    const data = await res.json();
+    if (data.error) {
+      document.getElementById(tid).textContent = `⚠ Error: ${data.error.message}`;
     } else {
-      document.getElementById(tid).textContent=data.content?.[0]?.text||"Sorry, no response.";
+      document.getElementById(tid).textContent = data.content?.[0]?.text || "Sorry, no response.";
     }
-  } catch(e){
-    document.getElementById(tid).textContent="Connection error — please try again.";
+  } catch(e) {
+    document.getElementById(tid).textContent = "Connection error — please try again.";
   }
-  document.getElementById('send-btn').disabled=false;
-  el.scrollTop=el.scrollHeight;
+
+  document.getElementById('send-btn').disabled = false;
+  el.scrollTop = el.scrollHeight;
 }
 
-function quickAsk(q){document.getElementById('chat-input').value=q;sendMessage();}
+function addMessage(type, text) {
+  const el = document.getElementById('chat-messages');
+  el.innerHTML += `<div class="msg msg-${type}">${text}</div>`;
+  el.scrollTop = el.scrollHeight;
+}
 
-// ── INIT ───────────────────────────────────────────────────────
+function quickAsk(q) {
+  document.getElementById('chat-input').value = q;
+  sendMessage();
+}
+
+// Allow Enter to send (Shift+Enter for new line)
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('chat-input');
+  if (input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────
 updateKeyIndicator();
-if(!getApiKey()) showSetupScreen();
+if (!getApiKey()) showSetupScreen();
 renderBooks();
 </script>
 </body>
