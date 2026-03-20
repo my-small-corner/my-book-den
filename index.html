@@ -22,110 +22,84 @@
 html, body { height: 100%; overflow: hidden; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; }
 
-/* ===== SETUP OVERLAY ===== */
-#setup {
+/* ===== MODAL BASE ===== */
+.modal-overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(9,16,13,0.97); z-index: 9999;
   align-items: center; justify-content: center;
 }
-#setup.show { display: flex; }
-.sbox {
+.modal-overlay.show { display: flex; }
+.modal-box {
   background: var(--surface); border: 1px solid var(--b2);
-  border-radius: 12px; padding: 36px; max-width: 440px; width: 92%;
+  border-radius: 12px; padding: 32px; max-width: 460px; width: 92%;
   box-shadow: 0 20px 60px rgba(0,0,0,0.8);
 }
-.sbox h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--abright); margin-bottom: 6px; }
-.ssub { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--tmut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
-.sbox p { font-size: 0.86rem; color: var(--tdim); line-height: 1.6; margin-bottom: 14px; }
-.sbox p strong { color: var(--text); }
-.sinput { width: 100%; background: var(--s2); border: 1px solid var(--b2); border-radius: 6px; padding: 11px 13px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.76rem; outline: none; margin-bottom: 8px; display: block; }
-.sinput:focus { border-color: var(--accent); }
-.sinput::placeholder { color: var(--tmut); }
-.serr { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--stop); margin-bottom: 8px; display: none; }
-.sbtn { width: 100%; background: var(--accent); border: none; border-radius: 6px; padding: 11px; color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.78rem; cursor: pointer; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; display: block; }
-.sbtn:hover { background: var(--abright); }
-.snote { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--tmut); line-height: 1.6; padding: 10px 12px; background: var(--s2); border-radius: 5px; border-left: 2px solid var(--adim); }
+.modal-box h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--abright); margin-bottom: 6px; }
+.modal-sub { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--tmut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+.modal-box p { font-size: 0.85rem; color: var(--tdim); line-height: 1.6; margin-bottom: 14px; }
+.modal-box p strong { color: var(--text); }
+.finput { width: 100%; background: var(--s2); border: 1px solid var(--b2); border-radius: 5px; padding: 10px 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.84rem; outline: none; margin-bottom: 10px; display: block; transition: border-color 0.2s; }
+.finput:focus { border-color: var(--accent); }
+.finput::placeholder { color: var(--tmut); }
+select.finput { cursor: pointer; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0; }
+.frow .finput { margin-bottom: 10px; }
+.flabel { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; display: block; }
+.ferr { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--stop); margin-bottom: 8px; display: none; }
+.fbtn { width: 100%; background: var(--accent); border: none; border-radius: 5px; padding: 11px; color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.76rem; cursor: pointer; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; display: block; transition: background 0.2s; }
+.fbtn:hover { background: var(--abright); }
+.fbtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.fbtn-sec { background: var(--s2); color: var(--tdim); border: 1px solid var(--b2); }
+.fbtn-sec:hover { background: var(--s3); color: var(--text); }
+.fnote { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut); line-height: 1.6; padding: 10px 12px; background: var(--s2); border-radius: 5px; border-left: 2px solid var(--adim); }
 
 /* ===== HEADER ===== */
 header {
-  padding: 13px 22px; border-bottom: 1px solid var(--border);
+  padding: 12px 22px; border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  background: #0b1510; flex-shrink: 0; height: 56px;
+  background: #0b1510; flex-shrink: 0; height: 54px;
 }
 .hl { display: flex; align-items: baseline; gap: 12px; }
 header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--abright); }
-.hsub { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--tmut); letter-spacing: 2px; text-transform: uppercase; }
-.hr { display: flex; align-items: center; gap: 8px; }
-.keybtn {
+.hsub { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut); letter-spacing: 2px; text-transform: uppercase; }
+.hr { display: flex; align-items: center; gap: 7px; }
+.hbtn {
   display: flex; align-items: center; gap: 6px;
-  font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut);
-  cursor: pointer; padding: 5px 10px; border: 1px solid var(--border);
-  border-radius: 4px; background: none; transition: all 0.2s;
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  cursor: pointer; padding: 5px 10px; border-radius: 4px;
+  background: var(--s2); border: 1px solid var(--b2);
+  color: var(--tmut); transition: all 0.2s; white-space: nowrap;
 }
-.keybtn:hover { border-color: var(--b2); color: var(--tdim); }
-.kdot { width: 6px; height: 6px; border-radius: 50%; background: var(--stop); }
-.kdot.on { background: var(--accent); }
-.editbtn {
-  display: flex; align-items: center; gap: 7px;
-  font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--tmut);
-  letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
-  padding: 6px 12px; border: 1px solid var(--b2); border-radius: 4px;
-  background: var(--s2); transition: all 0.2s; user-select: none;
-}
-.editbtn:hover { border-color: var(--adim); color: var(--accent); }
-.editbtn.on { border-color: var(--accent); color: var(--abright); background: var(--readbg); }
-.edot { width: 6px; height: 6px; border-radius: 50%; background: var(--tmut); }
-.editbtn.on .edot { background: var(--abright); box-shadow: 0 0 5px var(--accent); }
+.hbtn:hover { border-color: var(--adim); color: var(--accent); }
+.hbtn.active { border-color: var(--accent); color: var(--abright); background: var(--readbg); }
+.hbtn .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tmut); flex-shrink: 0; }
+.hbtn.active .dot { background: var(--abright); box-shadow: 0 0 5px var(--accent); }
+.kdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-/* ===== MAIN LAYOUT ===== */
-.layout {
-  display: flex; flex: 1;
-  height: calc(100vh - 56px);
-  overflow: hidden;
-}
+/* ===== LAYOUT ===== */
+.layout { display: flex; flex: 1; height: calc(100vh - 54px); overflow: hidden; }
 
 /* ===== SIDEBAR ===== */
-.sidebar {
-  width: 175px; min-width: 175px; flex-shrink: 0;
-  background: var(--surface); border-right: 1px solid var(--border);
-  display: flex; flex-direction: column; overflow-y: auto;
-}
-.slbl { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase; color: var(--tmut); padding: 14px 14px 7px; }
-.abtn {
-  display: block; width: 100%; text-align: left; padding: 10px 14px;
-  background: none; border: none; border-left: 3px solid transparent;
-  color: var(--tdim); font-family: 'Playfair Display', serif; font-size: 0.88rem;
-  cursor: pointer; transition: all 0.15s;
-}
+.sidebar { width: 175px; min-width: 175px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+.slbl { font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 3px; text-transform: uppercase; color: var(--tmut); padding: 13px 13px 6px; }
+.abtn { display: block; width: 100%; text-align: left; padding: 10px 13px; background: none; border: none; border-left: 3px solid transparent; color: var(--tdim); font-family: 'Playfair Display', serif; font-size: 0.87rem; cursor: pointer; transition: all 0.15s; }
 .abtn:hover { color: var(--text); background: var(--s2); }
 .abtn.on { color: var(--abright); border-left-color: var(--accent); background: var(--s2); }
-.abtn small { display: block; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--tmut); margin-top: 1px; }
+.abtn small { display: block; font-family: 'DM Mono', monospace; font-size: 0.57rem; color: var(--tmut); margin-top: 1px; }
 .sdiv { border: none; border-top: 1px solid var(--border); margin: 5px 0; }
 
 /* ===== BOOK PANEL ===== */
 .bookpanel { flex: 1; overflow-y: auto; padding: 18px 22px; min-width: 0; }
 .sblock { margin-bottom: 26px; }
-.shdr {
-  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700;
-  color: var(--accent); border-bottom: 1px solid var(--border);
-  padding-bottom: 6px; margin-bottom: 9px;
-  display: flex; align-items: center; gap: 9px;
-}
+.shdr { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 9px; display: flex; align-items: center; gap: 9px; }
 .sct { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--tmut); background: var(--s2); padding: 2px 7px; border-radius: 9px; }
-.brow {
-  display: flex; align-items: center; gap: 9px; padding: 8px 10px;
-  border-radius: 4px; margin-bottom: 2px; cursor: pointer;
-  border: 1px solid transparent; position: relative; transition: background 0.1s;
-}
+.brow { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 4px; margin-bottom: 2px; cursor: pointer; border: 1px solid transparent; position: relative; transition: background 0.1s; }
 .brow:hover { background: var(--s2); border-color: var(--border); }
 .brow.sel { background: var(--s2); border-color: var(--adim); }
 .bnum { font-family: 'DM Mono', monospace; font-size: 0.63rem; color: var(--tmut); width: 20px; flex-shrink: 0; }
 .btitle { flex: 1; font-size: 0.87rem; color: var(--text); }
 .btitle.no { color: var(--tmut); font-style: italic; }
-.badge {
-  font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 1px;
-  text-transform: uppercase; padding: 2px 7px; border-radius: 3px; flex-shrink: 0;
-}
+.badge { font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; flex-shrink: 0; }
 .br { background: var(--readbg); color: var(--read); }
 .bu { background: var(--unreadbg); color: var(--unread); }
 .bn { background: var(--nownbg); color: var(--nown); border: 1px solid var(--b2); }
@@ -134,111 +108,128 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
 .bf { background: var(--nfndbg); color: var(--nfnd); }
 .edit-mode .badge { outline: 1px dashed var(--adim); cursor: pointer; }
 .edit-mode .badge:hover { outline-color: var(--accent); }
-.smenu {
-  display: none; position: absolute; right: 8px; top: 34px;
-  background: var(--s3); border: 1px solid var(--b2); border-radius: 5px;
-  z-index: 500; min-width: 148px; box-shadow: 0 8px 24px rgba(0,0,0,0.7); overflow: hidden;
-}
+.smenu { display: none; position: absolute; right: 8px; top: 34px; background: var(--s3); border: 1px solid var(--b2); border-radius: 5px; z-index: 500; min-width: 148px; box-shadow: 0 8px 24px rgba(0,0,0,0.7); overflow: hidden; }
 .smi { padding: 8px 12px; font-family: 'DM Mono', monospace; font-size: 0.67rem; cursor: pointer; display: flex; align-items: center; gap: 7px; color: var(--tdim); transition: background 0.1s; }
 .smi:hover { background: var(--s2); color: var(--text); }
 .smd { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
 
-/* ===== RIGHT PANEL — wide ===== */
-.right {
-  width: 480px; min-width: 480px; flex-shrink: 0;
-  background: var(--surface); border-left: 1px solid var(--border);
-  display: flex; flex-direction: column; overflow: hidden;
-}
+/* Sync indicator */
+.sync-row { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--tmut); padding: 5px 0 0; }
+.sync-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--tmut); flex-shrink: 0; }
+.sync-dot.ok { background: var(--accent); }
+.sync-dot.err { background: var(--stop); }
+.sync-dot.spin { background: var(--rdg); animation: pulse 0.8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 
-/* Stats */
+/* ===== RIGHT PANEL ===== */
+.right { width: 480px; min-width: 480px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 .stats { padding: 11px 16px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; flex-shrink: 0; }
 .stat { text-align: center; }
-.stn { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; line-height: 1; }
-.stl { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tmut); margin-top: 2px; }
-
-/* Detail */
-.detail { padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; min-height: 95px; }
+.stn { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; line-height: 1; }
+.stl { font-family: 'DM Mono', monospace; font-size: 0.53rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tmut); margin-top: 2px; }
+.detail { padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; min-height: 90px; }
 .detail h2 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
 .dser { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--adim); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
 .dnote { font-size: 0.77rem; color: var(--tdim); line-height: 1.5; margin-top: 4px; }
-.nosel { font-family: 'DM Mono', monospace; font-size: 0.67rem; color: var(--tmut); text-align: center; padding: 16px 0; letter-spacing: 1px; }
+.nosel { font-family: 'DM Mono', monospace; font-size: 0.67rem; color: var(--tmut); text-align: center; padding: 14px 0; letter-spacing: 1px; }
 .etip { margin-top: 7px; padding: 6px 9px; background: var(--s2); border: 1px dashed var(--adim); border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 0.61rem; color: var(--adim); }
 
 /* ===== CHAT ===== */
 .chatwrap { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-
-.chathdr { padding: 9px 15px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.chathdr-left { display: flex; align-items: center; gap: 7px; }
+.chathdr { padding: 8px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.chathdr-l { display: flex; align-items: center; gap: 7px; }
 .chathdr span { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--tmut); }
 .aidot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
 .aidot.off { background: var(--tmut); animation: none; }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
-.clearbtn { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--tmut); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
+.clearbtn { font-family: 'DM Mono', monospace; font-size: 0.57rem; color: var(--tmut); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; cursor: pointer; transition: all 0.15s; }
 .clearbtn:hover { border-color: var(--b2); color: var(--tdim); }
-
-.quickbtns { padding: 7px 12px 5px; display: flex; flex-wrap: wrap; gap: 5px; flex-shrink: 0; }
-.qbtn { background: var(--s2); border: 1px solid var(--b2); border-radius: 4px; padding: 5px 10px; color: var(--tmut); font-family: 'DM Mono', monospace; font-size: 0.59rem; cursor: pointer; transition: all 0.15s; }
+.quickbtns { padding: 7px 12px 4px; display: flex; flex-wrap: wrap; gap: 5px; flex-shrink: 0; }
+.qbtn { background: var(--s2); border: 1px solid var(--b2); border-radius: 4px; padding: 4px 9px; color: var(--tmut); font-family: 'DM Mono', monospace; font-size: 0.58rem; cursor: pointer; transition: all 0.15s; }
 .qbtn:hover { border-color: var(--adim); color: var(--accent); }
-
-/* Scrollable messages */
 .chatmsgs { flex: 1; overflow-y: auto; padding: 10px 13px; display: flex; flex-direction: column; gap: 7px; min-height: 0; }
-.msg { padding: 10px 12px; border-radius: 5px; font-size: 0.83rem; line-height: 1.55; word-wrap: break-word; white-space: pre-wrap; animation: fin 0.2s ease; flex-shrink: 0; }
+.msg { padding: 10px 12px; border-radius: 5px; font-size: 0.82rem; line-height: 1.55; word-wrap: break-word; white-space: pre-wrap; animation: fin 0.2s ease; flex-shrink: 0; }
 @keyframes fin { from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:none} }
 .msg.ai { background: var(--s2); color: var(--text); border-left: 2px solid var(--adim); }
 .msg.me { background: var(--readbg); color: var(--tdim); text-align: right; border-right: 2px solid var(--adim); }
-
-/* Input area */
 .chatfoot { padding: 10px 13px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 7px; flex-shrink: 0; }
-#msginput {
-  width: 100%; background: var(--s2); border: 1px solid var(--b2);
-  border-radius: 5px; padding: 10px 12px; color: var(--text);
-  font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
-  outline: none; resize: none; height: 64px; line-height: 1.5;
-  display: block; transition: border-color 0.2s;
-}
+#msginput { width: 100%; background: var(--s2); border: 1px solid var(--b2); border-radius: 5px; padding: 10px 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; outline: none; resize: none; height: 62px; line-height: 1.5; display: block; transition: border-color 0.2s; }
 #msginput:focus { border-color: var(--accent); }
 #msginput::placeholder { color: var(--tmut); }
-#askbtn {
-  width: 100%; background: var(--accent); border: none; border-radius: 5px;
-  padding: 10px; color: var(--bg); font-family: 'DM Mono', monospace;
-  font-size: 0.75rem; font-weight: 500; cursor: pointer;
-  letter-spacing: 2px; text-transform: uppercase; transition: background 0.2s;
-  display: block;
-}
+#askbtn { width: 100%; background: var(--accent); border: none; border-radius: 5px; padding: 10px; color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.74rem; font-weight: 500; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: background 0.2s; display: block; }
 #askbtn:hover { background: var(--abright); }
 #askbtn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-/* Legend */
-.legend { padding: 7px 14px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
-.leg { display: flex; align-items: center; gap: 4px; font-family: 'DM Mono', monospace; font-size: 0.54rem; color: var(--tmut); text-transform: uppercase; }
+.legend { padding: 6px 14px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+.leg { display: flex; align-items: center; gap: 4px; font-family: 'DM Mono', monospace; font-size: 0.53rem; color: var(--tmut); text-transform: uppercase; }
 .ldot { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
-
-/* Typing dots */
 .dots { display: flex; gap: 4px; align-items: center; }
 .dots span { width: 5px; height: 5px; background: var(--adim); border-radius: 50%; animation: bonce 1s infinite; }
 .dots span:nth-child(2){animation-delay:.15s} .dots span:nth-child(3){animation-delay:.3s}
 @keyframes bonce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
-
-/* Toast */
-.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--readbg); border: 1px solid var(--adim); color: var(--abright); font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 7px 16px; border-radius: 20px; pointer-events: none; opacity: 0; transition: opacity 0.3s; z-index: 9000; }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--readbg); border: 1px solid var(--adim); color: var(--abright); font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 7px 16px; border-radius: 20px; pointer-events: none; opacity: 0; transition: opacity 0.3s; z-index: 9000; white-space: nowrap; }
 .toast.show { opacity: 1; }
-
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
 </style>
 </head>
 <body>
 
-<!-- SETUP SCREEN -->
-<div id="setup">
-  <div class="sbox">
+<!-- API KEY SETUP -->
+<div class="modal-overlay" id="setup">
+  <div class="modal-box">
     <h2>📚 My Book Tracker</h2>
-    <div class="ssub">One-time setup</div>
-    <p>Enter your <strong>Anthropic API key</strong> to enable the AI chat. Stored privately in your browser only — never in the page code, never shared with anyone.</p>
-    <p>You only need to do this <strong>once per device</strong>.</p>
-    <input class="sinput" id="keyinput" type="password" placeholder="sk-ant-api03-...">
-    <div class="serr" id="keyerr">⚠ Key should start with sk-ant-</div>
-    <button class="sbtn" id="savekeybtn">Save &amp; Open My Library</button>
-    <div class="snote">🔒 Stored in your browser only. Click the 🔑 button in the header to remove it at any time.</div>
+    <div class="modal-sub">One-time setup</div>
+    <p>Enter your <strong>Anthropic API key</strong> to enable the AI chat. Stored privately in your browser only — never in the code.</p>
+    <label class="flabel">Anthropic API Key</label>
+    <input class="finput" id="keyinput" type="password" placeholder="sk-ant-api03-...">
+    <div class="ferr" id="keyerr">⚠ Key should start with sk-ant-</div>
+    <button class="fbtn" id="savekeybtn">Save &amp; Open My Library</button>
+    <div class="fnote">🔒 Stored in your browser only. Click 🔑 in the header to remove it at any time.</div>
+  </div>
+</div>
+
+<!-- ADD BOOK MODAL -->
+<div class="modal-overlay" id="addmodal">
+  <div class="modal-box">
+    <h2>➕ Add a Book</h2>
+    <div class="modal-sub">Saves to site &amp; Google Sheet</div>
+    <label class="flabel">Book Title *</label>
+    <input class="finput" id="add-title" placeholder="e.g. The Fallen">
+    <label class="flabel">Author</label>
+    <select class="finput" id="add-author">
+      <option value="baldacci">David Baldacci</option>
+      <option value="patterson">James Patterson</option>
+      <option value="crichton">Michael Crichton</option>
+      <option value="brown">Dan Brown</option>
+      <option value="ww2">WW2 History</option>
+      <option value="other">Other Favourites</option>
+    </select>
+    <label class="flabel">Series</label>
+    <input class="finput" id="add-series" placeholder="e.g. Amos Decker Series">
+    <div class="frow">
+      <div>
+        <label class="flabel">Book Number</label>
+        <input class="finput" id="add-num" type="number" placeholder="e.g. 4" min="1">
+      </div>
+      <div>
+        <label class="flabel">Status</label>
+        <select class="finput" id="add-status">
+          <option value="notowned">Not Owned</option>
+          <option value="unread">Owned — Unread</option>
+          <option value="read">Read</option>
+          <option value="reading">Currently Reading</option>
+          <option value="stopped">Stopped</option>
+          <option value="notfound">Not Found</option>
+        </select>
+      </div>
+    </div>
+    <label class="flabel">Note (optional)</label>
+    <input class="finput" id="add-note" placeholder="Any extra notes...">
+    <div class="ferr" id="add-err">⚠ Please enter a book title</div>
+    <button class="fbtn" id="addsavebtn">Save Book</button>
+    <button class="fbtn fbtn-sec" id="addcancelbtn">Cancel</button>
+    <div class="sync-row" id="add-sync">
+      <div class="sync-dot" id="add-sync-dot"></div>
+      <span id="add-sync-msg">Ready to save</span>
+    </div>
   </div>
 </div>
 
@@ -249,20 +240,19 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
     <span class="hsub">Personal Book Tracker</span>
   </div>
   <div class="hr">
-    <button class="keybtn" id="keybtn">
-      <div class="kdot" id="kdot"></div>
+    <button class="hbtn" id="addbookbtn">➕ Add Book</button>
+    <button class="hbtn" id="keybtn">
+      <div class="kdot" id="kdot" style="background:var(--stop)"></div>
       <span id="keystat">🔑 No Key</span>
     </button>
-    <button class="editbtn" id="editbtn">
-      <div class="edot" id="edot"></div>
+    <button class="hbtn" id="editbtn">
+      <div class="dot" id="edot"></div>
       <span id="editlbl">Edit Mode: Off</span>
     </button>
   </div>
 </header>
 
-<!-- LAYOUT -->
 <div class="layout">
-
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="slbl">Authors</div>
@@ -280,39 +270,30 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
 
   <!-- RIGHT PANEL -->
   <div class="right">
-
     <div class="stats" id="stats"></div>
-
-    <div class="detail" id="detail">
-      <div class="nosel">← Select a book to see details</div>
-    </div>
-
+    <div class="detail" id="detail"><div class="nosel">← Select a book to see details</div></div>
     <div class="chatwrap">
       <div class="chathdr">
-        <div class="chathdr-left">
+        <div class="chathdr-l">
           <div class="aidot" id="aidot"></div>
           <span id="chatstat">Ask about your books</span>
         </div>
         <button class="clearbtn" id="clearbtn">Clear chat</button>
       </div>
-
       <div class="quickbtns">
         <button class="qbtn" data-q="What should I read next?">What next?</button>
         <button class="qbtn" data-q="How many Baldacci books have I read?">My stats</button>
         <button class="qbtn" data-q="What am I missing from each Baldacci series?">Series gaps?</button>
         <button class="qbtn" data-q="Recommend something similar to Baldacci">Suggestions</button>
       </div>
-
       <div class="chatmsgs" id="chatmsgs">
-        <div class="msg ai">Hi! I know your full collection. Try "Do I have The Hit?", "What should I read after The Fix?", or "What WW2 books should I try?" 📖</div>
+        <div class="msg ai">Hi! I know your full collection. Try "Do I have The Hit?", "What should I read after The Fix?", or click a quick button above 📖</div>
       </div>
-
       <div class="chatfoot">
         <textarea id="msginput" placeholder="Ask me anything about your books..."></textarea>
         <button id="askbtn">Ask</button>
       </div>
     </div>
-
     <div class="legend">
       <div class="leg"><div class="ldot" style="background:var(--read)"></div>Read</div>
       <div class="leg"><div class="ldot" style="background:var(--unread)"></div>Owned</div>
@@ -321,20 +302,24 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
       <div class="leg"><div class="ldot" style="background:var(--nfnd)"></div>Not Found</div>
       <div class="leg"><div class="ldot" style="background:var(--stop)"></div>Stopped</div>
     </div>
-
   </div>
 </div>
 
-<div class="toast" id="toast">✓ Saved</div>
+<div class="toast" id="toast"></div>
 
 <script>
 // =====================================================================
-// DATA
+// GOOGLE SHEETS SCRIPT URL
+// =====================================================================
+var SHEET_URL = "https://script.google.com/macros/s/AKfycbw5b29oSi2PZF8FKL7dms9akG8M1XJPOhUVl_bMZR7XzVKA-XNlGHnDR0LPqEOZdyQw/exec";
+
+// =====================================================================
+// DEFAULT DATA
 // =====================================================================
 var DEFAULT = {
   baldacci: {
     author:"David Baldacci",
-    note:"Easy fast-paced thrillers. Favourite author — very easy reads.",
+    note:"Easy fast-paced thrillers. Favourite author.",
     series:[
       {name:"Amos Decker Series",books:[
         {num:1,title:"Memory Man",status:"read"},
@@ -404,7 +389,7 @@ var DEFAULT = {
   },
   patterson: {
     author:"James Patterson",
-    note:"Fast-paced crime thrillers, very similar to Baldacci. Wife has Obsessed (#15). Start from Book 1 ideally.",
+    note:"Fast-paced crime thrillers, similar to Baldacci. Wife has Obsessed (#15).",
     series:[
       {name:"Michael Bennett Series",books:[
         {num:1,title:"Step on a Crack",status:"notowned",note:"Best place to start"},
@@ -430,7 +415,7 @@ var DEFAULT = {
   },
   crichton: {
     author:"Michael Crichton",
-    note:"Sci-fi/techno-thriller. Loves world-building and concept-driven stories.",
+    note:"Sci-fi/techno-thriller. Loves world-building.",
     series:[
       {name:"Owned",books:[
         {title:"Sphere",status:"unread"},
@@ -451,7 +436,7 @@ var DEFAULT = {
   },
   brown: {
     author:"Dan Brown",
-    note:"All books read and owned except Origin.",
+    note:"All read and owned except Origin.",
     series:[
       {name:"Robert Langdon Series",books:[
         {num:1,title:"Angels & Demons",status:"read"},
@@ -468,18 +453,18 @@ var DEFAULT = {
   },
   ww2: {
     author:"WW2 History & Non-Fiction",
-    note:"Loves narrative non-fiction — personal human-driven WW2 accounts.",
+    note:"Loves narrative non-fiction — personal human WW2 accounts.",
     series:[
       {name:"Read",books:[
-        {title:"The Pathfinders",status:"read",note:"By Will Iredale — elite RAF bombers over occupied Europe"},
-        {title:"The Boys in the Boat",status:"read",note:"By Daniel James Brown — US rowing team beat Nazi Germany at 1936 Olympics"}
+        {title:"The Pathfinders",status:"read",note:"By Will Iredale — elite RAF bombers"},
+        {title:"The Boys in the Boat",status:"read",note:"By Daniel James Brown — US rowing team at 1936 Olympics"}
       ]},
       {name:"Suggested Reading",books:[
-        {title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand — US Olympic runner survives WW2 POW camps"},
+        {title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand — US Olympic runner in WW2 POW camps"},
         {title:"The Splendid and the Vile",status:"notowned",note:"By Erik Larson — Churchill during the Blitz"},
-        {title:"Beneath a Scarlet Sky",status:"notowned",note:"By Mark Sullivan — Italian spy helping Jews escape the Nazis"},
-        {title:"Dead Wake",status:"notowned",note:"By Erik Larson — sinking of the Lusitania as a thriller"},
-        {title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell — WW2 bombing campaign, fast read"}
+        {title:"Beneath a Scarlet Sky",status:"notowned",note:"By Mark Sullivan — Italian spy helping Jews escape Nazis"},
+        {title:"Dead Wake",status:"notowned",note:"By Erik Larson — sinking of the Lusitania"},
+        {title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell — WW2 bombing campaign"}
       ]}
     ]
   },
@@ -496,7 +481,7 @@ var DEFAULT = {
       ]},
       {name:"Ayn Rand",books:[
         {title:"The Fountainhead",status:"read",note:"Loved it!"},
-        {title:"Atlas Shrugged",status:"stopped",note:"Owned but couldn't get into it — too dense"}
+        {title:"Atlas Shrugged",status:"stopped",note:"Couldn't get into it — too dense"}
       ]}
     ]
   }
@@ -506,27 +491,33 @@ var ST = {
   read:    {label:"Read \u2713", cls:"br", color:"var(--read)"},
   unread:  {label:"Owned",      cls:"bu", color:"var(--unread)"},
   notowned:{label:"Not Owned",  cls:"bn", color:"var(--nown)"},
-  reading: {label:"Reading\u2026", cls:"bg", color:"var(--rdg)"},
+  reading: {label:"Reading\u2026",cls:"bg",color:"var(--rdg)"},
   stopped: {label:"Stopped",    cls:"bs", color:"var(--stop)"},
   notfound:{label:"Not Found",  cls:"bf", color:"var(--nfnd)"}
+};
+
+var AUTHOR_NAMES = {
+  baldacci:"David Baldacci", patterson:"James Patterson",
+  crichton:"Michael Crichton", brown:"Dan Brown",
+  ww2:"WW2 History", other:"Other Favourites"
 };
 
 // =====================================================================
 // STATE
 // =====================================================================
-var LIB_KEY = "bklibv4";
-var API_KEY  = "bkapikey";
+var LIB_KEY = "bklibv5";
+var API_STORE = "bkapikey";
 
 function loadLib() {
   try { var s = localStorage.getItem(LIB_KEY); if(s) return JSON.parse(s); } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT));
 }
 function saveLib() {
-  try { localStorage.setItem(LIB_KEY, JSON.stringify(lib)); showToast("Saved"); } catch(e){}
+  try { localStorage.setItem(LIB_KEY, JSON.stringify(lib)); } catch(e){}
 }
-function getKey() { return localStorage.getItem(API_KEY) || ""; }
-function setKey(k) { localStorage.setItem(API_KEY, k); }
-function removeKey() { localStorage.removeItem(API_KEY); }
+function getKey()  { return localStorage.getItem(API_STORE) || ""; }
+function setKey(k) { localStorage.setItem(API_STORE, k); }
+function delKey()  { localStorage.removeItem(API_STORE); }
 
 var lib = loadLib();
 var curAuthor = "baldacci";
@@ -534,7 +525,36 @@ var editMode = false;
 var openMenu = null;
 
 // =====================================================================
-// SETUP SCREEN
+// TOAST
+// =====================================================================
+function toast(msg, dur) {
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, dur || 2200);
+}
+
+// =====================================================================
+// GOOGLE SHEETS SYNC
+// =====================================================================
+function syncToSheet(bookData) {
+  var payload = {
+    Author: AUTHOR_NAMES[bookData.authorKey] || bookData.authorKey,
+    Series: bookData.series || "",
+    Title:  bookData.title  || "",
+    Number: bookData.num    || "",
+    Status: bookData.status || "",
+    Note:   bookData.note   || ""
+  };
+  return fetch(SHEET_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify(payload)
+  });
+}
+
+// =====================================================================
+// API KEY SETUP
 // =====================================================================
 function showSetup() { document.getElementById("setup").classList.add("show"); }
 function hideSetup() { document.getElementById("setup").classList.remove("show"); }
@@ -544,23 +564,19 @@ document.getElementById("savekeybtn").addEventListener("click", function() {
   var err = document.getElementById("keyerr");
   if (!k.startsWith("sk-ant-")) { err.style.display = "block"; return; }
   err.style.display = "none";
-  setKey(k);
-  hideSetup();
-  updateKeyUI();
+  setKey(k); hideSetup(); updateKeyUI();
 });
 
 document.getElementById("keybtn").addEventListener("click", function() {
-  if (confirm("Remove your API key from this browser?\nThe AI chat will stop working until you add it again.")) {
-    removeKey();
-    document.getElementById("keyinput").value = "";
-    updateKeyUI();
-    showSetup();
+  if (confirm("Remove your API key?\nThe AI chat will stop until you add it again.")) {
+    delKey(); document.getElementById("keyinput").value = "";
+    updateKeyUI(); showSetup();
   }
 });
 
 function updateKeyUI() {
   var has = !!getKey();
-  document.getElementById("kdot").className = "kdot" + (has ? " on" : "");
+  document.getElementById("kdot").style.background = has ? "var(--accent)" : "var(--stop)";
   document.getElementById("keystat").textContent = has ? "🔑 Connected" : "🔑 No Key";
   document.getElementById("aidot").className = "aidot" + (has ? "" : " off");
   document.getElementById("chatstat").textContent = has ? "Ask about your books" : "Click 🔑 to set up AI";
@@ -571,10 +587,97 @@ function updateKeyUI() {
 // =====================================================================
 document.getElementById("editbtn").addEventListener("click", function() {
   editMode = !editMode;
-  this.classList.toggle("on", editMode);
+  this.classList.toggle("active", editMode);
+  document.getElementById("edot").className = "dot" + (editMode ? " on" : "");
   document.getElementById("editlbl").textContent = editMode ? "Edit Mode: On" : "Edit Mode: Off";
-  closeMenu();
-  renderBooks();
+  closeMenu(); renderBooks();
+});
+
+// =====================================================================
+// ADD BOOK MODAL
+// =====================================================================
+document.getElementById("addbookbtn").addEventListener("click", function() {
+  document.getElementById("add-title").value = "";
+  document.getElementById("add-series").value = "";
+  document.getElementById("add-num").value = "";
+  document.getElementById("add-note").value = "";
+  document.getElementById("add-status").value = "notowned";
+  document.getElementById("add-author").value = curAuthor;
+  document.getElementById("add-err").style.display = "none";
+  setSyncStatus("", "", "");
+  document.getElementById("addmodal").classList.add("show");
+});
+
+document.getElementById("addcancelbtn").addEventListener("click", function() {
+  document.getElementById("addmodal").classList.remove("show");
+});
+
+function setSyncStatus(state, msg) {
+  var dot = document.getElementById("add-sync-dot");
+  var txt = document.getElementById("add-sync-msg");
+  dot.className = "sync-dot" + (state ? " " + state : "");
+  txt.textContent = msg || "Ready to save";
+}
+
+document.getElementById("addsavebtn").addEventListener("click", function() {
+  var title  = document.getElementById("add-title").value.trim();
+  var author = document.getElementById("add-author").value;
+  var series = document.getElementById("add-series").value.trim();
+  var num    = document.getElementById("add-num").value.trim();
+  var status = document.getElementById("add-status").value;
+  var note   = document.getElementById("add-note").value.trim();
+
+  if (!title) { document.getElementById("add-err").style.display = "block"; return; }
+  document.getElementById("add-err").style.display = "none";
+
+  // Add to local library
+  var seriesName = series || "Standalone & Others";
+  var authorData = lib[author];
+  var targetSeries = null;
+  authorData.series.forEach(function(s) {
+    if (s.name === seriesName) targetSeries = s;
+  });
+  if (!targetSeries) {
+    targetSeries = { name: seriesName, books: [] };
+    authorData.series.push(targetSeries);
+  }
+  var newBook = { title: title, status: status };
+  if (num) newBook.num = parseInt(num);
+  if (note) newBook.note = note;
+  targetSeries.books.push(newBook);
+  saveLib();
+
+  // If we're viewing this author, re-render
+  if (curAuthor === author) renderBooks();
+
+  // Sync to Google Sheet
+  setSyncStatus("spin", "Saving to Google Sheet...");
+  document.getElementById("addsavebtn").disabled = true;
+
+  syncToSheet({ authorKey: author, series: seriesName, title: title, num: num, status: status, note: note })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.result === "success") {
+        setSyncStatus("ok", "✓ Saved to Google Sheet!");
+        toast("✓ Book added & synced to Google Sheet!");
+        setTimeout(function() {
+          document.getElementById("addmodal").classList.remove("show");
+        }, 1200);
+      } else {
+        setSyncStatus("err", "⚠ Saved locally, sheet sync failed");
+        toast("Book added locally (sheet sync failed)");
+      }
+    })
+    .catch(function() {
+      setSyncStatus("err", "⚠ Saved locally, no sheet connection");
+      toast("Book added locally (no sheet connection)");
+      setTimeout(function() {
+        document.getElementById("addmodal").classList.remove("show");
+      }, 1500);
+    })
+    .finally(function() {
+      document.getElementById("addsavebtn").disabled = false;
+    });
 });
 
 // =====================================================================
@@ -586,8 +689,7 @@ document.querySelectorAll(".abtn").forEach(function(btn) {
     document.querySelectorAll(".abtn").forEach(function(b){ b.classList.remove("on"); });
     this.classList.add("on");
     document.getElementById("detail").innerHTML = '<div class="nosel">← Select a book to see details</div>';
-    closeMenu();
-    renderBooks();
+    closeMenu(); renderBooks();
   });
 });
 
@@ -605,11 +707,10 @@ function renderBooks() {
       var num = book.num != null ? '<span class="bnum">#' + book.num + '</span>' : '<span class="bnum"></span>';
       var tc = book.status === "notowned" ? "btitle no" : "btitle";
       var st = ST[book.status] || ST.notowned;
-      html += '<div class="brow" id="br-' + si + '-' + bi + '" data-si="' + si + '" data-bi="' + bi + '">';
-      html += num;
-      html += '<span class="' + tc + '">' + book.title + '</span>';
-      html += '<span class="badge ' + st.cls + '" data-si="' + si + '" data-bi="' + bi + '">' + st.label + '</span>';
-      html += '<div class="smenu" id="sm-' + si + '-' + bi + '"></div>';
+      html += '<div class="brow" id="br-'+si+'-'+bi+'" data-si="'+si+'" data-bi="'+bi+'">';
+      html += num + '<span class="' + tc + '">' + book.title + '</span>';
+      html += '<span class="badge ' + st.cls + '" data-si="'+si+'" data-bi="'+bi+'">' + st.label + '</span>';
+      html += '<div class="smenu" id="sm-'+si+'-'+bi+'"></div>';
       html += '</div>';
     });
     html += '</div>';
@@ -617,7 +718,6 @@ function renderBooks() {
   panel.innerHTML = html;
   if (editMode) panel.classList.add("edit-mode"); else panel.classList.remove("edit-mode");
 
-  // Book row clicks
   panel.querySelectorAll(".brow").forEach(function(row) {
     row.addEventListener("click", function(e) {
       if (e.target.classList.contains("badge")) return;
@@ -625,7 +725,6 @@ function renderBooks() {
     });
   });
 
-  // Badge clicks
   panel.querySelectorAll(".badge").forEach(function(badge) {
     badge.addEventListener("click", function(e) {
       e.stopPropagation();
@@ -634,30 +733,30 @@ function renderBooks() {
       if (!editMode) { selectBook(si, bi); return; }
       var mid = "sm-" + si + "-" + bi;
       if (openMenu === mid) { closeMenu(); return; }
-      closeMenu();
-      openMenu = mid;
+      closeMenu(); openMenu = mid;
       var menu = document.getElementById(mid);
       var mhtml = "";
       Object.keys(ST).forEach(function(s) {
-        mhtml += '<div class="smi" data-si="' + si + '" data-bi="' + bi + '" data-st="' + s + '">';
-        mhtml += '<div class="smd" style="background:' + ST[s].color + '"></div>' + ST[s].label;
-        mhtml += '</div>';
+        mhtml += '<div class="smi" data-si="'+si+'" data-bi="'+bi+'" data-st="'+s+'">';
+        mhtml += '<div class="smd" style="background:'+ST[s].color+'"></div>' + ST[s].label + '</div>';
       });
       menu.innerHTML = mhtml;
       menu.style.display = "block";
       menu.querySelectorAll(".smi").forEach(function(item) {
         item.addEventListener("click", function(e) {
           e.stopPropagation();
-          lib[curAuthor].series[parseInt(this.getAttribute("data-si"))].books[parseInt(this.getAttribute("data-bi"))].status = this.getAttribute("data-st");
+          var si2 = parseInt(this.getAttribute("data-si"));
+          var bi2 = parseInt(this.getAttribute("data-bi"));
+          lib[curAuthor].series[si2].books[bi2].status = this.getAttribute("data-st");
           saveLib(); closeMenu(); renderBooks();
+          toast("✓ Status updated");
         });
       });
       selectBook(si, bi);
     });
   });
 
-  renderStats();
-  updateCounts();
+  renderStats(); updateCounts();
 }
 
 function closeMenu() {
@@ -691,7 +790,7 @@ function selectBook(si, bi) {
   document.getElementById("detail").innerHTML =
     '<h2>' + book.title + '</h2>' +
     '<div class="dser">' + series.name + (book.num ? ' · Book #' + book.num : '') + '</div>' +
-    '<span class="badge ' + st.cls + '" style="margin-bottom:7px;display:inline-block">' + st.label + '</span>' +
+    '<span class="badge ' + st.cls + '" style="margin-bottom:6px;display:inline-block">' + st.label + '</span>' +
     (book.note ? '<div class="dnote">' + book.note + '</div>' : '') +
     (hints[book.status] || '') + etip;
 }
@@ -708,26 +807,17 @@ function renderStats() {
     else notowned++;
   });});
   document.getElementById("stats").innerHTML =
-    '<div class="stat"><div class="stn" style="color:var(--read)">' + read + '</div><div class="stl">Read</div></div>' +
-    '<div class="stat"><div class="stn" style="color:var(--unread)">' + owned + '</div><div class="stl">To Read</div></div>' +
-    '<div class="stat"><div class="stn" style="color:var(--nown)">' + notowned + '</div><div class="stl">Not Owned</div></div>';
+    '<div class="stat"><div class="stn" style="color:var(--read)">'+read+'</div><div class="stl">Read</div></div>' +
+    '<div class="stat"><div class="stn" style="color:var(--unread)">'+owned+'</div><div class="stl">To Read</div></div>' +
+    '<div class="stat"><div class="stn" style="color:var(--nown)">'+notowned+'</div><div class="stl">Not Owned</div></div>';
 }
+
 function updateCounts() {
   Object.keys(lib).forEach(function(key) {
     var t = 0; lib[key].series.forEach(function(s){ t += s.books.length; });
     var el = document.getElementById("c-" + key);
     if (el) el.textContent = t + " books";
   });
-}
-
-// =====================================================================
-// TOAST
-// =====================================================================
-function showToast(msg) {
-  var t = document.getElementById("toast");
-  t.textContent = "✓ " + msg;
-  t.classList.add("show");
-  setTimeout(function(){ t.classList.remove("show"); }, 2000);
 }
 
 // =====================================================================
@@ -748,7 +838,7 @@ function buildContext() {
     ctx += "\n";
   });
   ctx += "Status: READ=finished, UNREAD=owned/not read, NOTOWNED=doesn't own, READING=currently reading, STOPPED=gave up, NOTFOUND=read but missing.\n";
-  ctx += "Be concise and friendly. They may be in a shop. Answer ownership questions directly.";
+  ctx += "Be concise and friendly. They may be in a shop.";
   return ctx;
 }
 
@@ -774,9 +864,8 @@ function addTyping() {
 
 function doSend(msg) {
   var key = getKey();
-  if (!key) { addMsg("ai", "⚠ No API key set. Click the 🔑 button in the header to add your key."); return; }
+  if (!key) { addMsg("ai", "⚠ No API key. Click 🔑 in the header to add your key."); return; }
   if (!msg.trim()) return;
-
   addMsg("me", msg);
   document.getElementById("msginput").value = "";
   var typing = addTyping();
@@ -799,43 +888,23 @@ function doSend(msg) {
   })
   .then(function(r){ return r.json(); })
   .then(function(data) {
-    if (data.error) {
-      typing.textContent = "⚠ Error: " + data.error.message;
-    } else {
-      typing.textContent = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : "Sorry, no response.";
-    }
-    var msgs = document.getElementById("chatmsgs");
-    msgs.scrollTop = msgs.scrollHeight;
+    typing.textContent = data.error ? "⚠ Error: " + data.error.message :
+      (data.content && data.content[0] ? data.content[0].text : "Sorry, no response.");
+    document.getElementById("chatmsgs").scrollTop = document.getElementById("chatmsgs").scrollHeight;
   })
-  .catch(function(e) {
-    typing.textContent = "Connection error — please try again.";
-  })
-  .finally(function() {
-    document.getElementById("askbtn").disabled = false;
-  });
+  .catch(function() { typing.textContent = "Connection error — please try again."; })
+  .finally(function() { document.getElementById("askbtn").disabled = false; });
 }
 
-// ASK button
 document.getElementById("askbtn").addEventListener("click", function() {
   doSend(document.getElementById("msginput").value);
 });
-
-// Enter to send
 document.getElementById("msginput").addEventListener("keydown", function(e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    doSend(this.value);
-  }
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doSend(this.value); }
 });
-
-// Quick buttons
 document.querySelectorAll(".qbtn").forEach(function(btn) {
-  btn.addEventListener("click", function() {
-    doSend(this.getAttribute("data-q"));
-  });
+  btn.addEventListener("click", function() { doSend(this.getAttribute("data-q")); });
 });
-
-// Clear chat
 document.getElementById("clearbtn").addEventListener("click", function() {
   document.getElementById("chatmsgs").innerHTML = '<div class="msg ai">Chat cleared! Ask me anything about your books 📖</div>';
 });
