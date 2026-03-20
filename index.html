@@ -17,23 +17,16 @@
   --rdg: #f0a04a; --rdgbg: #2a1a08;
   --stop: #c06080; --stopbg: #2a0f18;
   --nfnd: #8a70c0; --nfndbg: #180f2a;
+  --del: #e05050; --delbg: #2a0a0a;
   --text: #d4ead8; --tdim: #7aaa8a; --tmut: #3d6050;
 }
 html, body { height: 100%; overflow: hidden; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; }
 
 /* ===== MODAL BASE ===== */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(9,16,13,0.97); z-index: 9999;
-  align-items: center; justify-content: center;
-}
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(9,16,13,0.97); z-index: 9999; align-items: center; justify-content: center; }
 .modal-overlay.show { display: flex; }
-.modal-box {
-  background: var(--surface); border: 1px solid var(--b2);
-  border-radius: 12px; padding: 32px; max-width: 460px; width: 92%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-}
+.modal-box { background: var(--surface); border: 1px solid var(--b2); border-radius: 12px; padding: 32px; max-width: 460px; width: 92%; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
 .modal-box h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--abright); margin-bottom: 6px; }
 .modal-sub { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--tmut); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
 .modal-box p { font-size: 0.85rem; color: var(--tdim); line-height: 1.6; margin-bottom: 14px; }
@@ -42,7 +35,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 .finput:focus { border-color: var(--accent); }
 .finput::placeholder { color: var(--tmut); }
 select.finput { cursor: pointer; }
-.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .frow .finput { margin-bottom: 10px; }
 .flabel { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; display: block; }
 .ferr { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--stop); margin-bottom: 8px; display: none; }
@@ -51,29 +44,26 @@ select.finput { cursor: pointer; }
 .fbtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .fbtn-sec { background: var(--s2); color: var(--tdim); border: 1px solid var(--b2); }
 .fbtn-sec:hover { background: var(--s3); color: var(--text); }
+.fbtn-del { background: var(--delbg); color: var(--del); border: 1px solid var(--del); }
+.fbtn-del:hover { background: var(--del); color: var(--bg); }
 .fnote { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut); line-height: 1.6; padding: 10px 12px; background: var(--s2); border-radius: 5px; border-left: 2px solid var(--adim); }
+.sync-row { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--tmut); padding: 8px 0 0; }
+.sync-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--tmut); flex-shrink: 0; }
+.sync-dot.ok { background: var(--accent); }
+.sync-dot.err { background: var(--stop); }
+.sync-dot.spin { background: var(--rdg); animation: pulse 0.8s infinite; }
 
 /* ===== HEADER ===== */
-header {
-  padding: 12px 22px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  background: #0b1510; flex-shrink: 0; height: 54px;
-}
+header { padding: 12px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #0b1510; flex-shrink: 0; height: 54px; }
 .hl { display: flex; align-items: baseline; gap: 12px; }
 header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--abright); }
 .hsub { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--tmut); letter-spacing: 2px; text-transform: uppercase; }
 .hr { display: flex; align-items: center; gap: 7px; }
-.hbtn {
-  display: flex; align-items: center; gap: 6px;
-  font-family: 'DM Mono', monospace; font-size: 0.62rem;
-  cursor: pointer; padding: 5px 10px; border-radius: 4px;
-  background: var(--s2); border: 1px solid var(--b2);
-  color: var(--tmut); transition: all 0.2s; white-space: nowrap;
-}
+.hbtn { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.62rem; cursor: pointer; padding: 5px 10px; border-radius: 4px; background: var(--s2); border: 1px solid var(--b2); color: var(--tmut); transition: all 0.2s; white-space: nowrap; }
 .hbtn:hover { border-color: var(--adim); color: var(--accent); }
 .hbtn.active { border-color: var(--accent); color: var(--abright); background: var(--readbg); }
 .hbtn .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tmut); flex-shrink: 0; }
-.hbtn.active .dot { background: var(--abright); box-shadow: 0 0 5px var(--accent); }
+.hbtn.active .dot { background: var(--abright); }
 .kdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
 /* ===== LAYOUT ===== */
@@ -113,13 +103,10 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
 .smi:hover { background: var(--s2); color: var(--text); }
 .smd { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
 
-/* Sync indicator */
-.sync-row { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--tmut); padding: 5px 0 0; }
-.sync-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--tmut); flex-shrink: 0; }
-.sync-dot.ok { background: var(--accent); }
-.sync-dot.err { background: var(--stop); }
-.sync-dot.spin { background: var(--rdg); animation: pulse 0.8s infinite; }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+/* Delete button shown in edit mode on each row */
+.delbtn { display: none; background: none; border: none; color: var(--tmut); font-size: 0.75rem; cursor: pointer; padding: 2px 5px; border-radius: 3px; transition: all 0.15s; flex-shrink: 0; }
+.delbtn:hover { color: var(--del); background: var(--delbg); }
+.edit-mode .delbtn { display: block; }
 
 /* ===== RIGHT PANEL ===== */
 .right { width: 480px; min-width: 480px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
@@ -141,6 +128,7 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
 .chathdr span { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--tmut); }
 .aidot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
 .aidot.off { background: var(--tmut); animation: none; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 .clearbtn { font-family: 'DM Mono', monospace; font-size: 0.57rem; color: var(--tmut); background: none; border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; cursor: pointer; transition: all 0.15s; }
 .clearbtn:hover { border-color: var(--b2); color: var(--tdim); }
 .quickbtns { padding: 7px 12px 4px; display: flex; flex-wrap: wrap; gap: 5px; flex-shrink: 0; }
@@ -177,12 +165,12 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
   <div class="modal-box">
     <h2>📚 My Book Tracker</h2>
     <div class="modal-sub">One-time setup</div>
-    <p>Enter your <strong>Anthropic API key</strong> to enable the AI chat. Stored privately in your browser only — never in the code.</p>
+    <p>Enter your <strong>Anthropic API key</strong> to enable the AI chat. Stored privately in your browser only.</p>
     <label class="flabel">Anthropic API Key</label>
     <input class="finput" id="keyinput" type="password" placeholder="sk-ant-api03-...">
     <div class="ferr" id="keyerr">⚠ Key should start with sk-ant-</div>
     <button class="fbtn" id="savekeybtn">Save &amp; Open My Library</button>
-    <div class="fnote">🔒 Stored in your browser only. Click 🔑 in the header to remove it at any time.</div>
+    <div class="fnote">🔒 Stored in your browser only. Click 🔑 in the header to remove it.</div>
   </div>
 </div>
 
@@ -233,6 +221,22 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
   </div>
 </div>
 
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delmodal">
+  <div class="modal-box">
+    <h2>🗑 Delete Book</h2>
+    <div class="modal-sub">This cannot be undone on the site</div>
+    <p>Are you sure you want to delete <strong id="del-title-display"></strong>?</p>
+    <p>It will be hidden from your tracker. The Google Sheet will mark it as <strong>DELETED</strong> so you have a record.</p>
+    <button class="fbtn fbtn-del" id="delconfirmbtn">Yes, Delete It</button>
+    <button class="fbtn fbtn-sec" id="delcancelbtn">Cancel</button>
+    <div class="sync-row" id="del-sync">
+      <div class="sync-dot" id="del-sync-dot"></div>
+      <span id="del-sync-msg">Ready</span>
+    </div>
+  </div>
+</div>
+
 <!-- HEADER -->
 <header>
   <div class="hl">
@@ -253,7 +257,6 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
 </header>
 
 <div class="layout">
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="slbl">Authors</div>
     <button class="abtn on" data-key="baldacci">David Baldacci<small id="c-baldacci"></small></button>
@@ -265,10 +268,8 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
     <button class="abtn" data-key="other">Other Favourites<small id="c-other"></small></button>
   </div>
 
-  <!-- BOOK PANEL -->
   <div class="bookpanel" id="bookpanel"></div>
 
-  <!-- RIGHT PANEL -->
   <div class="right">
     <div class="stats" id="stats"></div>
     <div class="detail" id="detail"><div class="nosel">← Select a book to see details</div></div>
@@ -308,612 +309,418 @@ header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weig
 <div class="toast" id="toast"></div>
 
 <script>
-// =====================================================================
-// GOOGLE SHEETS SCRIPT URL
-// =====================================================================
 var SHEET_URL = "https://script.google.com/macros/s/AKfycbw5b29oSi2PZF8FKL7dms9akG8M1XJPOhUVl_bMZR7XzVKA-XNlGHnDR0LPqEOZdyQw/exec";
 
-// =====================================================================
-// DEFAULT DATA
-// =====================================================================
 var DEFAULT = {
-  baldacci: {
-    author:"David Baldacci",
-    note:"Easy fast-paced thrillers. Favourite author.",
-    series:[
-      {name:"Amos Decker Series",books:[
-        {num:1,title:"Memory Man",status:"read"},
-        {num:2,title:"The Last Mile",status:"read"},
-        {num:3,title:"The Fix",status:"reading"},
-        {num:4,title:"The Fallen",status:"notowned"},
-        {num:5,title:"Redemption",status:"read"},
-        {num:6,title:"Walk the Wire",status:"unread"},
-        {num:7,title:"Long Shadows",status:"read"}
-      ]},
-      {name:"Atlee Pine Series",books:[
-        {num:1,title:"Long Road to Mercy",status:"read"},
-        {num:2,title:"A Minute to Midnight",status:"unread"},
-        {num:3,title:"Daylight",status:"unread"},
-        {num:4,title:"Mercy",status:"notowned"}
-      ]},
-      {name:"Aloysius Archer Series",books:[
-        {num:1,title:"One Good Deed",status:"unread"},
-        {num:2,title:"A Gambling Man",status:"unread"},
-        {num:3,title:"Dream Town",status:"notowned"}
-      ]},
-      {name:"Travis Devine Series",books:[
-        {num:1,title:"The 6:20 Man",status:"read"},
-        {num:2,title:"The Edge",status:"notowned"},
-        {num:3,title:"To Die For",status:"notowned"}
-      ]},
-      {name:"Will Robie Series",books:[
-        {num:1,title:"The Innocent",status:"read"},
-        {num:2,title:"The Hit",status:"notowned"},
-        {num:3,title:"The Target",status:"notowned"},
-        {num:4,title:"The Guilty",status:"unread"},
-        {num:5,title:"End Game",status:"notowned"}
-      ]},
-      {name:"John Puller Series",books:[
-        {num:1,title:"Zero Day",status:"notowned"},
-        {num:2,title:"The Forgotten",status:"notowned"},
-        {num:3,title:"The Escape",status:"read"},
-        {num:4,title:"No Man's Land",status:"notowned"}
-      ]},
-      {name:"Sean King & Michelle Maxwell",books:[
-        {num:1,title:"Split Second",status:"unread"},
-        {num:2,title:"Hour Game",status:"unread"},
-        {num:3,title:"Simple Genius",status:"notowned"},
-        {num:4,title:"First Family",status:"notowned"},
-        {num:5,title:"The Sixth Man",status:"unread"},
-        {num:6,title:"King and Maxwell",status:"notowned"}
-      ]},
-      {name:"The Camel Club Series",books:[
-        {num:1,title:"The Camel Club",status:"notowned"},
-        {num:2,title:"The Collectors",status:"notowned"},
-        {num:3,title:"Stone Cold",status:"unread"},
-        {num:4,title:"Divine Justice",status:"notowned"},
-        {num:5,title:"Hell's Corner",status:"notowned"}
-      ]},
-      {name:"Walter Nash Series (New)",books:[
-        {num:1,title:"Nash Falls (Nov 2025)",status:"notowned"},
-        {num:2,title:"Hope Rises (Apr 2026)",status:"notowned"}
-      ]},
-      {name:"Standalone & Others",books:[
-        {title:"A Calamity of Souls",status:"unread"},
-        {title:"Simply Lies",status:"unread"},
-        {title:"Find You First",status:"unread"},
-        {title:"Deliver Us From Evil",status:"unread"},
-        {title:"Strangers in Time (Apr 2025)",status:"notowned"}
-      ]}
-    ]
-  },
-  patterson: {
-    author:"James Patterson",
-    note:"Fast-paced crime thrillers, similar to Baldacci. Wife has Obsessed (#15).",
-    series:[
-      {name:"Michael Bennett Series",books:[
-        {num:1,title:"Step on a Crack",status:"notowned",note:"Best place to start"},
-        {num:2,title:"Run for Your Life",status:"notowned"},
-        {num:3,title:"Worst Case",status:"notowned"},
-        {num:4,title:"Tick Tock",status:"notowned"},
-        {num:5,title:"I, Michael Bennett",status:"notowned"},
-        {num:6,title:"Gone",status:"notowned"},
-        {num:7,title:"Burn",status:"notowned"},
-        {num:8,title:"Alert",status:"notowned"},
-        {num:9,title:"Bullseye",status:"notowned"},
-        {num:10,title:"Haunted",status:"notowned"},
-        {num:11,title:"Ambush",status:"notowned"},
-        {num:12,title:"Blindside",status:"notowned"},
-        {num:13,title:"The Russian",status:"notowned"},
-        {num:14,title:"Shattered",status:"notowned"},
-        {num:15,title:"Obsessed",status:"unread",note:"Wife's book — decent standalone entry too"},
-        {num:16,title:"Crosshairs",status:"notowned"},
-        {num:17,title:"Paranoia",status:"notowned"},
-        {num:18,title:"Delusional (2026)",status:"notowned"}
-      ]}
-    ]
-  },
-  crichton: {
-    author:"Michael Crichton",
-    note:"Sci-fi/techno-thriller. Loves world-building.",
-    series:[
-      {name:"Owned",books:[
-        {title:"Sphere",status:"unread"},
-        {title:"Timeline",status:"unread"},
-        {title:"Jurassic Park",status:"notfound",note:"Read but missing — may be The Lost World?"}
-      ]},
-      {name:"Not Owned",books:[
-        {title:"The Lost World",status:"notowned"},
-        {title:"Congo",status:"notowned"},
-        {title:"The Andromeda Strain",status:"notowned"},
-        {title:"Disclosure",status:"notowned"},
-        {title:"Rising Sun",status:"notowned"},
-        {title:"The Great Train Robbery",status:"notowned"},
-        {title:"Eaters of the Dead",status:"notowned"},
-        {title:"Next",status:"notowned"}
-      ]}
-    ]
-  },
-  brown: {
-    author:"Dan Brown",
-    note:"All read and owned except Origin.",
-    series:[
-      {name:"Robert Langdon Series",books:[
-        {num:1,title:"Angels & Demons",status:"read"},
-        {num:2,title:"The Da Vinci Code",status:"read"},
-        {num:3,title:"The Lost Symbol",status:"read"},
-        {num:4,title:"Inferno",status:"read"},
-        {num:5,title:"Origin",status:"notowned"}
-      ]},
-      {name:"Standalone",books:[
-        {title:"Digital Fortress",status:"read"},
-        {title:"Deception Point",status:"read"}
-      ]}
-    ]
-  },
-  ww2: {
-    author:"WW2 History & Non-Fiction",
-    note:"Loves narrative non-fiction — personal human WW2 accounts.",
-    series:[
-      {name:"Read",books:[
-        {title:"The Pathfinders",status:"read",note:"By Will Iredale — elite RAF bombers"},
-        {title:"The Boys in the Boat",status:"read",note:"By Daniel James Brown — US rowing team at 1936 Olympics"}
-      ]},
-      {name:"Suggested Reading",books:[
-        {title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand — US Olympic runner in WW2 POW camps"},
-        {title:"The Splendid and the Vile",status:"notowned",note:"By Erik Larson — Churchill during the Blitz"},
-        {title:"Beneath a Scarlet Sky",status:"notowned",note:"By Mark Sullivan — Italian spy helping Jews escape Nazis"},
-        {title:"Dead Wake",status:"notowned",note:"By Erik Larson — sinking of the Lusitania"},
-        {title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell — WW2 bombing campaign"}
-      ]}
-    ]
-  },
-  other: {
-    author:"Other Favourites",
-    note:"Epic fantasy, sci-fi, and philosophical classics.",
-    series:[
-      {name:"J.R.R. Tolkien",books:[
-        {title:"The Hobbit",status:"read"},
-        {title:"The Lord of the Rings",status:"read"}
-      ]},
-      {name:"Frank Herbert",books:[
-        {title:"Dune",status:"read"}
-      ]},
-      {name:"Ayn Rand",books:[
-        {title:"The Fountainhead",status:"read",note:"Loved it!"},
-        {title:"Atlas Shrugged",status:"stopped",note:"Couldn't get into it — too dense"}
-      ]}
-    ]
-  }
+  baldacci:{author:"David Baldacci",note:"Easy fast-paced thrillers. Favourite author.",series:[
+    {name:"Amos Decker Series",books:[{num:1,title:"Memory Man",status:"read"},{num:2,title:"The Last Mile",status:"read"},{num:3,title:"The Fix",status:"reading"},{num:4,title:"The Fallen",status:"notowned"},{num:5,title:"Redemption",status:"read"},{num:6,title:"Walk the Wire",status:"unread"},{num:7,title:"Long Shadows",status:"read"}]},
+    {name:"Atlee Pine Series",books:[{num:1,title:"Long Road to Mercy",status:"read"},{num:2,title:"A Minute to Midnight",status:"unread"},{num:3,title:"Daylight",status:"unread"},{num:4,title:"Mercy",status:"notowned"}]},
+    {name:"Aloysius Archer Series",books:[{num:1,title:"One Good Deed",status:"unread"},{num:2,title:"A Gambling Man",status:"unread"},{num:3,title:"Dream Town",status:"notowned"}]},
+    {name:"Travis Devine Series",books:[{num:1,title:"The 6:20 Man",status:"read"},{num:2,title:"The Edge",status:"notowned"},{num:3,title:"To Die For",status:"notowned"}]},
+    {name:"Will Robie Series",books:[{num:1,title:"The Innocent",status:"read"},{num:2,title:"The Hit",status:"notowned"},{num:3,title:"The Target",status:"notowned"},{num:4,title:"The Guilty",status:"unread"},{num:5,title:"End Game",status:"notowned"}]},
+    {name:"John Puller Series",books:[{num:1,title:"Zero Day",status:"notowned"},{num:2,title:"The Forgotten",status:"notowned"},{num:3,title:"The Escape",status:"read"},{num:4,title:"No Man's Land",status:"notowned"}]},
+    {name:"Sean King & Michelle Maxwell",books:[{num:1,title:"Split Second",status:"unread"},{num:2,title:"Hour Game",status:"unread"},{num:3,title:"Simple Genius",status:"notowned"},{num:4,title:"First Family",status:"notowned"},{num:5,title:"The Sixth Man",status:"unread"},{num:6,title:"King and Maxwell",status:"notowned"}]},
+    {name:"The Camel Club Series",books:[{num:1,title:"The Camel Club",status:"notowned"},{num:2,title:"The Collectors",status:"notowned"},{num:3,title:"Stone Cold",status:"unread"},{num:4,title:"Divine Justice",status:"notowned"},{num:5,title:"Hell's Corner",status:"notowned"}]},
+    {name:"Walter Nash Series (New)",books:[{num:1,title:"Nash Falls (Nov 2025)",status:"notowned"},{num:2,title:"Hope Rises (Apr 2026)",status:"notowned"}]},
+    {name:"Standalone & Others",books:[{title:"A Calamity of Souls",status:"unread"},{title:"Simply Lies",status:"unread"},{title:"Find You First",status:"unread"},{title:"Deliver Us From Evil",status:"unread"},{title:"Strangers in Time (Apr 2025)",status:"notowned"}]}
+  ]},
+  patterson:{author:"James Patterson",note:"Fast-paced crime thrillers, similar to Baldacci. Wife has Obsessed (#15).",series:[
+    {name:"Michael Bennett Series",books:[{num:1,title:"Step on a Crack",status:"notowned",note:"Best place to start"},{num:2,title:"Run for Your Life",status:"notowned"},{num:3,title:"Worst Case",status:"notowned"},{num:4,title:"Tick Tock",status:"notowned"},{num:5,title:"I, Michael Bennett",status:"notowned"},{num:6,title:"Gone",status:"notowned"},{num:7,title:"Burn",status:"notowned"},{num:8,title:"Alert",status:"notowned"},{num:9,title:"Bullseye",status:"notowned"},{num:10,title:"Haunted",status:"notowned"},{num:11,title:"Ambush",status:"notowned"},{num:12,title:"Blindside",status:"notowned"},{num:13,title:"The Russian",status:"notowned"},{num:14,title:"Shattered",status:"notowned"},{num:15,title:"Obsessed",status:"unread",note:"Wife's book"},{num:16,title:"Crosshairs",status:"notowned"},{num:17,title:"Paranoia",status:"notowned"},{num:18,title:"Delusional (2026)",status:"notowned"}]}
+  ]},
+  crichton:{author:"Michael Crichton",note:"Sci-fi/techno-thriller. Loves world-building.",series:[
+    {name:"Owned",books:[{title:"Sphere",status:"unread"},{title:"Timeline",status:"unread"},{title:"Jurassic Park",status:"notfound",note:"Read but missing"}]},
+    {name:"Not Owned",books:[{title:"The Lost World",status:"notowned"},{title:"Congo",status:"notowned"},{title:"The Andromeda Strain",status:"notowned"},{title:"Disclosure",status:"notowned"},{title:"Rising Sun",status:"notowned"},{title:"The Great Train Robbery",status:"notowned"},{title:"Eaters of the Dead",status:"notowned"},{title:"Next",status:"notowned"}]}
+  ]},
+  brown:{author:"Dan Brown",note:"All read and owned except Origin.",series:[
+    {name:"Robert Langdon Series",books:[{num:1,title:"Angels & Demons",status:"read"},{num:2,title:"The Da Vinci Code",status:"read"},{num:3,title:"The Lost Symbol",status:"read"},{num:4,title:"Inferno",status:"read"},{num:5,title:"Origin",status:"notowned"}]},
+    {name:"Standalone",books:[{title:"Digital Fortress",status:"read"},{title:"Deception Point",status:"read"}]}
+  ]},
+  ww2:{author:"WW2 History & Non-Fiction",note:"Loves narrative non-fiction WW2 accounts.",series:[
+    {name:"Read",books:[{title:"The Pathfinders",status:"read",note:"By Will Iredale"},{title:"The Boys in the Boat",status:"read",note:"By Daniel James Brown"}]},
+    {name:"Suggested Reading",books:[{title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand"},{title:"The Splendid and the Vile",status:"notowned",note:"By Erik Larson"},{title:"Beneath a Scarlet Sky",status:"notowned",note:"By Mark Sullivan"},{title:"Dead Wake",status:"notowned",note:"By Erik Larson"},{title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell"}]}
+  ]},
+  other:{author:"Other Favourites",note:"Epic fantasy, sci-fi, philosophical classics.",series:[
+    {name:"J.R.R. Tolkien",books:[{title:"The Hobbit",status:"read"},{title:"The Lord of the Rings",status:"read"}]},
+    {name:"Frank Herbert",books:[{title:"Dune",status:"read"}]},
+    {name:"Ayn Rand",books:[{title:"The Fountainhead",status:"read",note:"Loved it!"},{title:"Atlas Shrugged",status:"stopped",note:"Couldn't get into it"}]}
+  ]}
 };
 
 var ST = {
-  read:    {label:"Read \u2713", cls:"br", color:"var(--read)"},
-  unread:  {label:"Owned",      cls:"bu", color:"var(--unread)"},
-  notowned:{label:"Not Owned",  cls:"bn", color:"var(--nown)"},
-  reading: {label:"Reading\u2026",cls:"bg",color:"var(--rdg)"},
-  stopped: {label:"Stopped",    cls:"bs", color:"var(--stop)"},
-  notfound:{label:"Not Found",  cls:"bf", color:"var(--nfnd)"}
+  read:    {label:"Read \u2713",    cls:"br", color:"var(--read)"},
+  unread:  {label:"Owned",         cls:"bu", color:"var(--unread)"},
+  notowned:{label:"Not Owned",     cls:"bn", color:"var(--nown)"},
+  reading: {label:"Reading\u2026", cls:"bg", color:"var(--rdg)"},
+  stopped: {label:"Stopped",       cls:"bs", color:"var(--stop)"},
+  notfound:{label:"Not Found",     cls:"bf", color:"var(--nfnd)"}
 };
 
-var AUTHOR_NAMES = {
-  baldacci:"David Baldacci", patterson:"James Patterson",
-  crichton:"Michael Crichton", brown:"Dan Brown",
-  ww2:"WW2 History", other:"Other Favourites"
-};
-
-// =====================================================================
-// STATE
-// =====================================================================
+var AUTHOR_NAMES = {baldacci:"David Baldacci",patterson:"James Patterson",crichton:"Michael Crichton",brown:"Dan Brown",ww2:"WW2 History",other:"Other Favourites"};
 var LIB_KEY = "bklibv5";
 var API_STORE = "bkapikey";
 
-function loadLib() {
-  try { var s = localStorage.getItem(LIB_KEY); if(s) return JSON.parse(s); } catch(e){}
-  return JSON.parse(JSON.stringify(DEFAULT));
-}
-function saveLib() {
-  try { localStorage.setItem(LIB_KEY, JSON.stringify(lib)); } catch(e){}
-}
-function getKey()  { return localStorage.getItem(API_STORE) || ""; }
-function setKey(k) { localStorage.setItem(API_STORE, k); }
+function loadLib() { try { var s=localStorage.getItem(LIB_KEY); if(s) return JSON.parse(s); } catch(e){} return JSON.parse(JSON.stringify(DEFAULT)); }
+function saveLib() { try { localStorage.setItem(LIB_KEY,JSON.stringify(lib)); } catch(e){} }
+function getKey()  { return localStorage.getItem(API_STORE)||""; }
+function setKey(k) { localStorage.setItem(API_STORE,k); }
 function delKey()  { localStorage.removeItem(API_STORE); }
 
 var lib = loadLib();
 var curAuthor = "baldacci";
 var editMode = false;
 var openMenu = null;
+var pendingDelete = null;
 
-// =====================================================================
-// TOAST
-// =====================================================================
-function toast(msg, dur) {
-  var t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(function(){ t.classList.remove("show"); }, dur || 2200);
+function toast(msg,dur) {
+  var t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); },dur||2200);
 }
 
-// =====================================================================
-// GOOGLE SHEETS SYNC
-// =====================================================================
-function syncToSheet(bookData) {
-  var payload = {
-    Author: AUTHOR_NAMES[bookData.authorKey] || bookData.authorKey,
-    Series: bookData.series || "",
-    Title:  bookData.title  || "",
-    Number: bookData.num    || "",
-    Status: bookData.status || "",
-    Note:   bookData.note   || ""
-  };
-  return fetch(SHEET_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain" },
-    body: JSON.stringify(payload)
+function setSyncStatus(prefix,state,msg) {
+  var dot=document.getElementById(prefix+"-sync-dot");
+  var txt=document.getElementById(prefix+"-sync-msg");
+  dot.className="sync-dot"+(state?" "+state:"");
+  txt.textContent=msg||"Ready";
+}
+
+function syncToSheet(payload) {
+  return fetch(SHEET_URL,{
+    method:"POST",
+    headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify(payload)
   });
 }
 
-// =====================================================================
-// API KEY SETUP
-// =====================================================================
+// ── API KEY ──
 function showSetup() { document.getElementById("setup").classList.add("show"); }
 function hideSetup() { document.getElementById("setup").classList.remove("show"); }
 
-document.getElementById("savekeybtn").addEventListener("click", function() {
-  var k = document.getElementById("keyinput").value.trim();
-  var err = document.getElementById("keyerr");
-  if (!k.startsWith("sk-ant-")) { err.style.display = "block"; return; }
-  err.style.display = "none";
-  setKey(k); hideSetup(); updateKeyUI();
+document.getElementById("savekeybtn").addEventListener("click",function(){
+  var k=document.getElementById("keyinput").value.trim();
+  var err=document.getElementById("keyerr");
+  if(!k.startsWith("sk-ant-")){ err.style.display="block"; return; }
+  err.style.display="none"; setKey(k); hideSetup(); updateKeyUI();
 });
 
-document.getElementById("keybtn").addEventListener("click", function() {
-  if (confirm("Remove your API key?\nThe AI chat will stop until you add it again.")) {
-    delKey(); document.getElementById("keyinput").value = "";
-    updateKeyUI(); showSetup();
+document.getElementById("keybtn").addEventListener("click",function(){
+  if(confirm("Remove your API key?\nThe AI chat will stop until you add it again.")){
+    delKey(); document.getElementById("keyinput").value=""; updateKeyUI(); showSetup();
   }
 });
 
-function updateKeyUI() {
-  var has = !!getKey();
-  document.getElementById("kdot").style.background = has ? "var(--accent)" : "var(--stop)";
-  document.getElementById("keystat").textContent = has ? "🔑 Connected" : "🔑 No Key";
-  document.getElementById("aidot").className = "aidot" + (has ? "" : " off");
-  document.getElementById("chatstat").textContent = has ? "Ask about your books" : "Click 🔑 to set up AI";
+function updateKeyUI(){
+  var has=!!getKey();
+  document.getElementById("kdot").style.background=has?"var(--accent)":"var(--stop)";
+  document.getElementById("keystat").textContent=has?"🔑 Connected":"🔑 No Key";
+  document.getElementById("aidot").className="aidot"+(has?"":" off");
+  document.getElementById("chatstat").textContent=has?"Ask about your books":"Click 🔑 to set up AI";
 }
 
-// =====================================================================
-// EDIT MODE
-// =====================================================================
-document.getElementById("editbtn").addEventListener("click", function() {
-  editMode = !editMode;
-  this.classList.toggle("active", editMode);
-  document.getElementById("edot").className = "dot" + (editMode ? " on" : "");
-  document.getElementById("editlbl").textContent = editMode ? "Edit Mode: On" : "Edit Mode: Off";
+// ── EDIT MODE ──
+document.getElementById("editbtn").addEventListener("click",function(){
+  editMode=!editMode;
+  this.classList.toggle("active",editMode);
+  document.getElementById("editlbl").textContent=editMode?"Edit Mode: On":"Edit Mode: Off";
   closeMenu(); renderBooks();
 });
 
-// =====================================================================
-// ADD BOOK MODAL
-// =====================================================================
-document.getElementById("addbookbtn").addEventListener("click", function() {
-  document.getElementById("add-title").value = "";
-  document.getElementById("add-series").value = "";
-  document.getElementById("add-num").value = "";
-  document.getElementById("add-note").value = "";
-  document.getElementById("add-status").value = "notowned";
-  document.getElementById("add-author").value = curAuthor;
-  document.getElementById("add-err").style.display = "none";
-  setSyncStatus("", "", "");
+// ── ADD BOOK ──
+document.getElementById("addbookbtn").addEventListener("click",function(){
+  document.getElementById("add-title").value="";
+  document.getElementById("add-series").value="";
+  document.getElementById("add-num").value="";
+  document.getElementById("add-note").value="";
+  document.getElementById("add-status").value="notowned";
+  document.getElementById("add-author").value=curAuthor;
+  document.getElementById("add-err").style.display="none";
+  setSyncStatus("add","","Ready to save");
   document.getElementById("addmodal").classList.add("show");
 });
 
-document.getElementById("addcancelbtn").addEventListener("click", function() {
+document.getElementById("addcancelbtn").addEventListener("click",function(){
   document.getElementById("addmodal").classList.remove("show");
 });
 
-function setSyncStatus(state, msg) {
-  var dot = document.getElementById("add-sync-dot");
-  var txt = document.getElementById("add-sync-msg");
-  dot.className = "sync-dot" + (state ? " " + state : "");
-  txt.textContent = msg || "Ready to save";
-}
+document.getElementById("addsavebtn").addEventListener("click",function(){
+  var title=document.getElementById("add-title").value.trim();
+  var author=document.getElementById("add-author").value;
+  var series=document.getElementById("add-series").value.trim();
+  var num=document.getElementById("add-num").value.trim();
+  var status=document.getElementById("add-status").value;
+  var note=document.getElementById("add-note").value.trim();
+  if(!title){ document.getElementById("add-err").style.display="block"; return; }
+  document.getElementById("add-err").style.display="none";
 
-document.getElementById("addsavebtn").addEventListener("click", function() {
-  var title  = document.getElementById("add-title").value.trim();
-  var author = document.getElementById("add-author").value;
-  var series = document.getElementById("add-series").value.trim();
-  var num    = document.getElementById("add-num").value.trim();
-  var status = document.getElementById("add-status").value;
-  var note   = document.getElementById("add-note").value.trim();
-
-  if (!title) { document.getElementById("add-err").style.display = "block"; return; }
-  document.getElementById("add-err").style.display = "none";
-
-  // Add to local library
-  var seriesName = series || "Standalone & Others";
-  var authorData = lib[author];
-  var targetSeries = null;
-  authorData.series.forEach(function(s) {
-    if (s.name === seriesName) targetSeries = s;
-  });
-  if (!targetSeries) {
-    targetSeries = { name: seriesName, books: [] };
-    authorData.series.push(targetSeries);
-  }
-  var newBook = { title: title, status: status };
-  if (num) newBook.num = parseInt(num);
-  if (note) newBook.note = note;
+  var seriesName=series||"Standalone & Others";
+  var targetSeries=null;
+  lib[author].series.forEach(function(s){ if(s.name===seriesName) targetSeries=s; });
+  if(!targetSeries){ targetSeries={name:seriesName,books:[]}; lib[author].series.push(targetSeries); }
+  var newBook={title:title,status:status};
+  if(num) newBook.num=parseInt(num);
+  if(note) newBook.note=note;
   targetSeries.books.push(newBook);
   saveLib();
+  if(curAuthor===author) renderBooks();
 
-  // If we're viewing this author, re-render
-  if (curAuthor === author) renderBooks();
+  setSyncStatus("add","spin","Saving to Google Sheet...");
+  document.getElementById("addsavebtn").disabled=true;
 
-  // Sync to Google Sheet
-  setSyncStatus("spin", "Saving to Google Sheet...");
-  document.getElementById("addsavebtn").disabled = true;
-
-  syncToSheet({ authorKey: author, series: seriesName, title: title, num: num, status: status, note: note })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.result === "success") {
-        setSyncStatus("ok", "✓ Saved to Google Sheet!");
-        toast("✓ Book added & synced to Google Sheet!");
-        setTimeout(function() {
-          document.getElementById("addmodal").classList.remove("show");
-        }, 1200);
+  syncToSheet({Author:AUTHOR_NAMES[author]||author,Series:seriesName,Title:title,Number:num,Status:status,Note:note})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.result==="success"){
+        setSyncStatus("add","ok","✓ Saved to Google Sheet!");
+        toast("✓ Book added & synced to sheet!");
+        setTimeout(function(){ document.getElementById("addmodal").classList.remove("show"); },1200);
       } else {
-        setSyncStatus("err", "⚠ Saved locally, sheet sync failed");
-        toast("Book added locally (sheet sync failed)");
+        setSyncStatus("add","err","Saved locally — sheet sync failed");
+        toast("Book added locally");
       }
     })
-    .catch(function() {
-      setSyncStatus("err", "⚠ Saved locally, no sheet connection");
-      toast("Book added locally (no sheet connection)");
-      setTimeout(function() {
-        document.getElementById("addmodal").classList.remove("show");
-      }, 1500);
+    .catch(function(){
+      setSyncStatus("add","err","Saved locally — no sheet connection");
+      toast("Book added locally");
+      setTimeout(function(){ document.getElementById("addmodal").classList.remove("show"); },1500);
     })
-    .finally(function() {
-      document.getElementById("addsavebtn").disabled = false;
+    .finally(function(){ document.getElementById("addsavebtn").disabled=false; });
+});
+
+// ── DELETE ──
+document.getElementById("delcancelbtn").addEventListener("click",function(){
+  document.getElementById("delmodal").classList.remove("show");
+  pendingDelete=null;
+});
+
+document.getElementById("delconfirmbtn").addEventListener("click",function(){
+  if(!pendingDelete) return;
+  var si=pendingDelete.si, bi=pendingDelete.bi;
+  var book=lib[curAuthor].series[si].books[bi];
+  var authorName=AUTHOR_NAMES[curAuthor]||curAuthor;
+
+  setSyncStatus("del","spin","Marking as deleted in sheet...");
+  document.getElementById("delconfirmbtn").disabled=true;
+
+  // Remove from local lib
+  lib[curAuthor].series[si].books.splice(bi,1);
+  // Remove empty series
+  if(lib[curAuthor].series[si].books.length===0){
+    lib[curAuthor].series.splice(si,1);
+  }
+  saveLib();
+  renderBooks();
+  document.getElementById("detail").innerHTML='<div class="nosel">← Select a book to see details</div>';
+
+  // Sync delete to sheet
+  syncToSheet({action:"delete",Author:authorName,Title:book.title})
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.result==="success"){
+        setSyncStatus("del","ok","✓ Marked as DELETED in sheet");
+        toast("🗑 Book deleted & sheet updated");
+      } else {
+        setSyncStatus("del","err","Deleted locally — sheet not updated");
+        toast("Book deleted locally");
+      }
+    })
+    .catch(function(){
+      setSyncStatus("del","err","Deleted locally — no sheet connection");
+      toast("Book deleted locally");
+    })
+    .finally(function(){
+      document.getElementById("delconfirmbtn").disabled=false;
+      setTimeout(function(){ document.getElementById("delmodal").classList.remove("show"); pendingDelete=null; },1400);
     });
 });
 
-// =====================================================================
-// AUTHOR SWITCH
-// =====================================================================
-document.querySelectorAll(".abtn").forEach(function(btn) {
-  btn.addEventListener("click", function() {
-    curAuthor = this.getAttribute("data-key");
+// ── AUTHOR SWITCH ──
+document.querySelectorAll(".abtn").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    curAuthor=this.getAttribute("data-key");
     document.querySelectorAll(".abtn").forEach(function(b){ b.classList.remove("on"); });
     this.classList.add("on");
-    document.getElementById("detail").innerHTML = '<div class="nosel">← Select a book to see details</div>';
+    document.getElementById("detail").innerHTML='<div class="nosel">← Select a book to see details</div>';
     closeMenu(); renderBooks();
   });
 });
 
-// =====================================================================
-// RENDER BOOKS
-// =====================================================================
-function renderBooks() {
-  var data = lib[curAuthor];
-  var panel = document.getElementById("bookpanel");
-  var html = "";
-  data.series.forEach(function(series, si) {
-    html += '<div class="sblock">';
-    html += '<div class="shdr">' + series.name + '<span class="sct">' + series.books.length + ' books</span></div>';
-    series.books.forEach(function(book, bi) {
-      var num = book.num != null ? '<span class="bnum">#' + book.num + '</span>' : '<span class="bnum"></span>';
-      var tc = book.status === "notowned" ? "btitle no" : "btitle";
-      var st = ST[book.status] || ST.notowned;
-      html += '<div class="brow" id="br-'+si+'-'+bi+'" data-si="'+si+'" data-bi="'+bi+'">';
-      html += num + '<span class="' + tc + '">' + book.title + '</span>';
-      html += '<span class="badge ' + st.cls + '" data-si="'+si+'" data-bi="'+bi+'">' + st.label + '</span>';
-      html += '<div class="smenu" id="sm-'+si+'-'+bi+'"></div>';
-      html += '</div>';
+// ── RENDER BOOKS ──
+function renderBooks(){
+  var data=lib[curAuthor];
+  var panel=document.getElementById("bookpanel");
+  var html="";
+  data.series.forEach(function(series,si){
+    html+='<div class="sblock"><div class="shdr">'+series.name+'<span class="sct">'+series.books.length+' books</span></div>';
+    series.books.forEach(function(book,bi){
+      var num=book.num!=null?'<span class="bnum">#'+book.num+'</span>':'<span class="bnum"></span>';
+      var tc=book.status==="notowned"?"btitle no":"btitle";
+      var st=ST[book.status]||ST.notowned;
+      html+='<div class="brow" id="br-'+si+'-'+bi+'" data-si="'+si+'" data-bi="'+bi+'">';
+      html+=num+'<span class="'+tc+'">'+book.title+'</span>';
+      html+='<span class="badge '+st.cls+'" data-si="'+si+'" data-bi="'+bi+'">'+st.label+'</span>';
+      html+='<button class="delbtn" data-si="'+si+'" data-bi="'+bi+'" title="Delete book">🗑</button>';
+      html+='<div class="smenu" id="sm-'+si+'-'+bi+'"></div>';
+      html+='</div>';
     });
-    html += '</div>';
+    html+='</div>';
   });
-  panel.innerHTML = html;
-  if (editMode) panel.classList.add("edit-mode"); else panel.classList.remove("edit-mode");
+  panel.innerHTML=html;
+  if(editMode) panel.classList.add("edit-mode"); else panel.classList.remove("edit-mode");
 
-  panel.querySelectorAll(".brow").forEach(function(row) {
-    row.addEventListener("click", function(e) {
-      if (e.target.classList.contains("badge")) return;
-      selectBook(parseInt(this.getAttribute("data-si")), parseInt(this.getAttribute("data-bi")));
+  panel.querySelectorAll(".brow").forEach(function(row){
+    row.addEventListener("click",function(e){
+      if(e.target.classList.contains("badge")||e.target.classList.contains("delbtn")) return;
+      selectBook(parseInt(this.getAttribute("data-si")),parseInt(this.getAttribute("data-bi")));
     });
   });
 
-  panel.querySelectorAll(".badge").forEach(function(badge) {
-    badge.addEventListener("click", function(e) {
+  panel.querySelectorAll(".badge").forEach(function(badge){
+    badge.addEventListener("click",function(e){
       e.stopPropagation();
-      var si = parseInt(this.getAttribute("data-si"));
-      var bi = parseInt(this.getAttribute("data-bi"));
-      if (!editMode) { selectBook(si, bi); return; }
-      var mid = "sm-" + si + "-" + bi;
-      if (openMenu === mid) { closeMenu(); return; }
-      closeMenu(); openMenu = mid;
-      var menu = document.getElementById(mid);
-      var mhtml = "";
-      Object.keys(ST).forEach(function(s) {
-        mhtml += '<div class="smi" data-si="'+si+'" data-bi="'+bi+'" data-st="'+s+'">';
-        mhtml += '<div class="smd" style="background:'+ST[s].color+'"></div>' + ST[s].label + '</div>';
+      var si=parseInt(this.getAttribute("data-si")), bi=parseInt(this.getAttribute("data-bi"));
+      if(!editMode){ selectBook(si,bi); return; }
+      var mid="sm-"+si+"-"+bi;
+      if(openMenu===mid){ closeMenu(); return; }
+      closeMenu(); openMenu=mid;
+      var menu=document.getElementById(mid);
+      var mhtml="";
+      Object.keys(ST).forEach(function(s){
+        mhtml+='<div class="smi" data-si="'+si+'" data-bi="'+bi+'" data-st="'+s+'"><div class="smd" style="background:'+ST[s].color+'"></div>'+ST[s].label+'</div>';
       });
-      menu.innerHTML = mhtml;
-      menu.style.display = "block";
-      menu.querySelectorAll(".smi").forEach(function(item) {
-        item.addEventListener("click", function(e) {
+      menu.innerHTML=mhtml; menu.style.display="block";
+      menu.querySelectorAll(".smi").forEach(function(item){
+        item.addEventListener("click",function(e){
           e.stopPropagation();
-          var si2 = parseInt(this.getAttribute("data-si"));
-          var bi2 = parseInt(this.getAttribute("data-bi"));
-          lib[curAuthor].series[si2].books[bi2].status = this.getAttribute("data-st");
-          saveLib(); closeMenu(); renderBooks();
-          toast("✓ Status updated");
+          lib[curAuthor].series[parseInt(this.getAttribute("data-si"))].books[parseInt(this.getAttribute("data-bi"))].status=this.getAttribute("data-st");
+          saveLib(); closeMenu(); renderBooks(); toast("✓ Status updated");
         });
       });
-      selectBook(si, bi);
+      selectBook(si,bi);
+    });
+  });
+
+  // Delete buttons
+  panel.querySelectorAll(".delbtn").forEach(function(btn){
+    btn.addEventListener("click",function(e){
+      e.stopPropagation();
+      var si=parseInt(this.getAttribute("data-si")), bi=parseInt(this.getAttribute("data-bi"));
+      var book=lib[curAuthor].series[si].books[bi];
+      pendingDelete={si:si,bi:bi};
+      document.getElementById("del-title-display").textContent=book.title;
+      setSyncStatus("del","","Ready");
+      document.getElementById("delmodal").classList.add("show");
     });
   });
 
   renderStats(); updateCounts();
 }
 
-function closeMenu() {
-  if (openMenu) {
-    var m = document.getElementById(openMenu);
-    if (m) m.style.display = "none";
-    openMenu = null;
-  }
+function closeMenu(){
+  if(openMenu){ var m=document.getElementById(openMenu); if(m) m.style.display="none"; openMenu=null; }
 }
-document.addEventListener("click", closeMenu);
+document.addEventListener("click",closeMenu);
 
-// =====================================================================
-// SELECT BOOK
-// =====================================================================
-function selectBook(si, bi) {
-  var book = lib[curAuthor].series[si].books[bi];
-  var series = lib[curAuthor].series[si];
+// ── SELECT BOOK ──
+function selectBook(si,bi){
+  var book=lib[curAuthor].series[si].books[bi];
+  var series=lib[curAuthor].series[si];
   document.querySelectorAll(".brow").forEach(function(r){ r.classList.remove("sel"); });
-  var row = document.getElementById("br-" + si + "-" + bi);
-  if (row) row.classList.add("sel");
-  var st = ST[book.status] || ST.notowned;
-  var hints = {
-    notowned: '<div class="dnote" style="color:var(--nown)">📍 Not in your collection yet</div>',
-    unread:   '<div class="dnote">📚 You own this — add it to your reading pile!</div>',
-    reading:  '<div class="dnote" style="color:var(--rdg)">🔖 Currently reading</div>',
-    read:     '<div class="dnote" style="color:var(--read)">✅ Finished!</div>',
-    stopped:  '<div class="dnote" style="color:var(--stop)">⏸ Started but put it down</div>',
-    notfound: '<div class="dnote" style="color:var(--nfnd)">🔍 Read it but can\'t find the book</div>'
+  var row=document.getElementById("br-"+si+"-"+bi); if(row) row.classList.add("sel");
+  var st=ST[book.status]||ST.notowned;
+  var hints={
+    notowned:'<div class="dnote" style="color:var(--nown)">📍 Not in your collection yet</div>',
+    unread:'<div class="dnote">📚 You own this — add to your reading pile!</div>',
+    reading:'<div class="dnote" style="color:var(--rdg)">🔖 Currently reading</div>',
+    read:'<div class="dnote" style="color:var(--read)">✅ Finished!</div>',
+    stopped:'<div class="dnote" style="color:var(--stop)">⏸ Started but put it down</div>',
+    notfound:'<div class="dnote" style="color:var(--nfnd)">🔍 Read it but can\'t find the book</div>'
   };
-  var etip = editMode ? '<div class="etip">✏️ Click any status badge to change it</div>' : '';
-  document.getElementById("detail").innerHTML =
-    '<h2>' + book.title + '</h2>' +
-    '<div class="dser">' + series.name + (book.num ? ' · Book #' + book.num : '') + '</div>' +
-    '<span class="badge ' + st.cls + '" style="margin-bottom:6px;display:inline-block">' + st.label + '</span>' +
-    (book.note ? '<div class="dnote">' + book.note + '</div>' : '') +
-    (hints[book.status] || '') + etip;
+  var etip=editMode?'<div class="etip">✏️ Click any status badge to change it · 🗑 to delete</div>':'';
+  document.getElementById("detail").innerHTML=
+    '<h2>'+book.title+'</h2>'+
+    '<div class="dser">'+series.name+(book.num?' · Book #'+book.num:'')+'</div>'+
+    '<span class="badge '+st.cls+'" style="margin-bottom:6px;display:inline-block">'+st.label+'</span>'+
+    (book.note?'<div class="dnote">'+book.note+'</div>':'')+
+    (hints[book.status]||'')+etip;
 }
 
-// =====================================================================
-// STATS + COUNTS
-// =====================================================================
-function renderStats() {
-  var data = lib[curAuthor];
-  var read = 0, owned = 0, notowned = 0;
+// ── STATS + COUNTS ──
+function renderStats(){
+  var data=lib[curAuthor]; var read=0,owned=0,notowned=0;
   data.series.forEach(function(s){ s.books.forEach(function(b){
-    if (["read","reading","notfound"].indexOf(b.status) >= 0) read++;
-    else if (["unread","stopped"].indexOf(b.status) >= 0) owned++;
+    if(["read","reading","notfound"].indexOf(b.status)>=0) read++;
+    else if(["unread","stopped"].indexOf(b.status)>=0) owned++;
     else notowned++;
   });});
-  document.getElementById("stats").innerHTML =
-    '<div class="stat"><div class="stn" style="color:var(--read)">'+read+'</div><div class="stl">Read</div></div>' +
-    '<div class="stat"><div class="stn" style="color:var(--unread)">'+owned+'</div><div class="stl">To Read</div></div>' +
+  document.getElementById("stats").innerHTML=
+    '<div class="stat"><div class="stn" style="color:var(--read)">'+read+'</div><div class="stl">Read</div></div>'+
+    '<div class="stat"><div class="stn" style="color:var(--unread)">'+owned+'</div><div class="stl">To Read</div></div>'+
     '<div class="stat"><div class="stn" style="color:var(--nown)">'+notowned+'</div><div class="stl">Not Owned</div></div>';
 }
 
-function updateCounts() {
-  Object.keys(lib).forEach(function(key) {
-    var t = 0; lib[key].series.forEach(function(s){ t += s.books.length; });
-    var el = document.getElementById("c-" + key);
-    if (el) el.textContent = t + " books";
+function updateCounts(){
+  Object.keys(lib).forEach(function(key){
+    var t=0; lib[key].series.forEach(function(s){ t+=s.books.length; });
+    var el=document.getElementById("c-"+key); if(el) el.textContent=t+" books";
   });
 }
 
-// =====================================================================
-// CHAT
-// =====================================================================
-function buildContext() {
-  var ctx = "You are a friendly personal book assistant. Here is the user's complete library:\n\n";
-  ctx += "PROFILE: Loves easy fast-paced thrillers (Baldacci is favourite). Also loves WW2 narrative non-fiction (The Boys in the Boat, The Pathfinders), epic world-building (Tolkien, Dune), philosophical classics (loved Fountainhead, couldn't finish Atlas Shrugged).\n\n";
-  Object.keys(lib).forEach(function(key) {
-    var data = lib[key];
-    ctx += "AUTHOR: " + data.author + "\n";
-    data.series.forEach(function(s) {
-      ctx += "  " + s.name + ":\n";
-      s.books.forEach(function(b) {
-        ctx += "    - " + b.title + (b.num ? " (#"+b.num+")" : "") + ": " + b.status.toUpperCase() + (b.note ? " — " + b.note : "") + "\n";
-      });
-    });
-    ctx += "\n";
+// ── CHAT ──
+function buildContext(){
+  var ctx="You are a friendly personal book assistant. Here is the user's complete library:\n\n";
+  ctx+="PROFILE: Loves easy fast-paced thrillers (Baldacci is favourite). Also loves WW2 narrative non-fiction (Boys in the Boat, The Pathfinders), epic world-building (Tolkien, Dune), philosophical classics (loved Fountainhead, couldn't finish Atlas Shrugged).\n\n";
+  Object.keys(lib).forEach(function(key){
+    var data=lib[key]; ctx+="AUTHOR: "+data.author+"\n";
+    data.series.forEach(function(s){
+      ctx+="  "+s.name+":\n";
+      s.books.forEach(function(b){ ctx+="    - "+b.title+(b.num?" (#"+b.num+")":"")+": "+b.status.toUpperCase()+(b.note?" — "+b.note:"")+"\n"; });
+    }); ctx+="\n";
   });
-  ctx += "Status: READ=finished, UNREAD=owned/not read, NOTOWNED=doesn't own, READING=currently reading, STOPPED=gave up, NOTFOUND=read but missing.\n";
-  ctx += "Be concise and friendly. They may be in a shop.";
+  ctx+="Status: READ=finished, UNREAD=owned/not read, NOTOWNED=doesn't own, READING=currently reading, STOPPED=gave up, NOTFOUND=read but missing.\nBe concise and friendly. They may be in a shop.";
   return ctx;
 }
 
-function addMsg(type, text) {
-  var msgs = document.getElementById("chatmsgs");
-  var div = document.createElement("div");
-  div.className = "msg " + type;
-  div.textContent = text;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div;
+function addMsg(type,text){
+  var msgs=document.getElementById("chatmsgs");
+  var div=document.createElement("div"); div.className="msg "+type; div.textContent=text;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight; return div;
 }
 
-function addTyping() {
-  var msgs = document.getElementById("chatmsgs");
-  var div = document.createElement("div");
-  div.className = "msg ai";
-  div.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div;
+function addTyping(){
+  var msgs=document.getElementById("chatmsgs");
+  var div=document.createElement("div"); div.className="msg ai";
+  div.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight; return div;
 }
 
-function doSend(msg) {
-  var key = getKey();
-  if (!key) { addMsg("ai", "⚠ No API key. Click 🔑 in the header to add your key."); return; }
-  if (!msg.trim()) return;
-  addMsg("me", msg);
-  document.getElementById("msginput").value = "";
-  var typing = addTyping();
-  document.getElementById("askbtn").disabled = true;
-
-  fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": key,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system: buildContext(),
-      messages: [{ role: "user", content: msg }]
-    })
+function doSend(msg){
+  var key=getKey();
+  if(!key){ addMsg("ai","⚠ No API key. Click 🔑 in the header to add your key."); return; }
+  if(!msg.trim()) return;
+  addMsg("me",msg); document.getElementById("msginput").value="";
+  var typing=addTyping(); document.getElementById("askbtn").disabled=true;
+  fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:buildContext(),messages:[{role:"user",content:msg}]})
   })
   .then(function(r){ return r.json(); })
-  .then(function(data) {
-    typing.textContent = data.error ? "⚠ Error: " + data.error.message :
-      (data.content && data.content[0] ? data.content[0].text : "Sorry, no response.");
-    document.getElementById("chatmsgs").scrollTop = document.getElementById("chatmsgs").scrollHeight;
+  .then(function(data){
+    typing.textContent=data.error?"⚠ Error: "+data.error.message:(data.content&&data.content[0]?data.content[0].text:"Sorry, no response.");
+    document.getElementById("chatmsgs").scrollTop=document.getElementById("chatmsgs").scrollHeight;
   })
-  .catch(function() { typing.textContent = "Connection error — please try again."; })
-  .finally(function() { document.getElementById("askbtn").disabled = false; });
+  .catch(function(){ typing.textContent="Connection error — please try again."; })
+  .finally(function(){ document.getElementById("askbtn").disabled=false; });
 }
 
-document.getElementById("askbtn").addEventListener("click", function() {
-  doSend(document.getElementById("msginput").value);
-});
-document.getElementById("msginput").addEventListener("keydown", function(e) {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doSend(this.value); }
-});
-document.querySelectorAll(".qbtn").forEach(function(btn) {
-  btn.addEventListener("click", function() { doSend(this.getAttribute("data-q")); });
-});
-document.getElementById("clearbtn").addEventListener("click", function() {
-  document.getElementById("chatmsgs").innerHTML = '<div class="msg ai">Chat cleared! Ask me anything about your books 📖</div>';
-});
+document.getElementById("askbtn").addEventListener("click",function(){ doSend(document.getElementById("msginput").value); });
+document.getElementById("msginput").addEventListener("keydown",function(e){ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); doSend(this.value); } });
+document.querySelectorAll(".qbtn").forEach(function(btn){ btn.addEventListener("click",function(){ doSend(this.getAttribute("data-q")); }); });
+document.getElementById("clearbtn").addEventListener("click",function(){ document.getElementById("chatmsgs").innerHTML='<div class="msg ai">Chat cleared! Ask me anything 📖</div>'; });
 
-// =====================================================================
-// INIT
-// =====================================================================
+// ── INIT ──
 updateKeyUI();
-if (!getKey()) showSetup();
+if(!getKey()) showSetup();
 renderBooks();
 </script>
 </body>
