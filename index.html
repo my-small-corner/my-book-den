@@ -1,1 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Book Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09100d;
+    --surface: #0e1a14;
+    --surface2: #152210;
+    --surface3: #1c2e1a;
+    --border: #1e3020;
+    --border2: #2a4030;
+    --accent: #3d9e5f;
+    --accent-dim: #265c38;
+    --accent-bright: #5ecb82;
+    --read: #4db876;
+    --read-bg: #0d2b18;
+    --unread: #7ec8a0;
+    --unread-bg: #102518;
+    --notowned: #446655;
+    --notowned-bg: #0e1a14;
+    --reading: #f0a04a;
+    --reading-bg: #2a1a08;
+    --stopped: #c06080;
+    --stopped-bg: #2a0f18;
+    --notfound: #8a70c0;
+    --notfound-bg: #180f2a;
+    --text: #d4ead8;
+    --text-dim: #7aaa8a;
+    --text-muted: #3d6050;
+    --header-bg: #0b1510;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+  header {
+    padding: 20px 28px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; background: var(--header-bg);
+  }
+  .header-left { display: flex; align-items: baseline; gap: 14px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 900; color: var(--accent-bright); letter-spacing: -0.5px; }
+  header .subtitle { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2.5px; text-transform: uppercase; }
+
+  .edit-toggle {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-muted);
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+    padding: 7px 14px; border: 1px solid var(--border2); border-radius: 5px;
+    background: var(--surface2); transition: all 0.2s; user-select: none;
+  }
+  .edit-toggle:hover { border-color: var(--accent-dim); color: var(--accent); }
+  .edit-toggle.active { border-color: var(--accent); color: var(--accent-bright); background: var(--read-bg); }
+  .edit-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); transition: background 0.2s; }
+  .edit-toggle.active .edit-dot { background: var(--accent-bright); box-shadow: 0 0 6px var(--accent); }
+
+  .layout { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 65px); }
+
+  .author-sidebar { width: 200px; min-width: 200px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sidebar-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); padding: 16px 16px 8px; }
+  .author-btn { display: block; width: 100%; text-align: left; padding: 11px 16px; background: none; border: none; border-left: 3px solid transparent; color: var(--text-dim); font-family: 'Playfair Display', serif; font-size: 0.93rem; cursor: pointer; transition: all 0.18s; }
+  .author-btn:hover { color: var(--text); background: var(--surface2); }
+  .author-btn.active { color: var(--accent-bright); border-left-color: var(--accent); background: var(--surface2); }
+  .author-btn small { display: block; font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-muted); margin-top: 2px; }
+  .sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
+
+  .book-panel { flex: 1; overflow-y: auto; padding: 22px 26px; }
+  .series-block { margin-bottom: 30px; }
+  .series-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 7px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .series-count { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-muted); background: var(--surface2); padding: 2px 8px; border-radius: 10px; letter-spacing: 1px; }
+
+  .book-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 5px; margin-bottom: 3px; cursor: pointer; transition: background 0.12s; border: 1px solid transparent; position: relative; }
+  .book-item:hover { background: var(--surface2); border-color: var(--border); }
+  .book-item.selected { background: var(--surface2); border-color: var(--accent-dim); }
+  .book-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); width: 22px; flex-shrink: 0; }
+  .book-title { flex: 1; font-size: 0.9rem; color: var(--text); }
+  .book-title.notowned { color: var(--text-muted); font-style: italic; }
+
+  .status-badge { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; }
+  .badge-read     { background: var(--read-bg);     color: var(--read); }
+  .badge-unread   { background: var(--unread-bg);   color: var(--unread); }
+  .badge-notowned { background: var(--notowned-bg); color: var(--notowned); border: 1px solid var(--border2); }
+  .badge-reading  { background: var(--reading-bg);  color: var(--reading); }
+  .badge-stopped  { background: var(--stopped-bg);  color: var(--stopped); }
+  .badge-notfound { background: var(--notfound-bg); color: var(--notfound); }
+
+  .edit-mode .status-badge { cursor: pointer; outline: 1px dashed var(--accent-dim); }
+  .edit-mode .status-badge:hover { outline-color: var(--accent); }
+
+  .status-menu { position: absolute; right: 10px; top: 38px; background: var(--surface3); border: 1px solid var(--border2); border-radius: 6px; z-index: 200; min-width: 155px; box-shadow: 0 8px 28px rgba(0,0,0,0.7); overflow: hidden; }
+  .status-menu-item { padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.5px; cursor: pointer; transition: background 0.1s; display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
+  .status-menu-item:hover { background: var(--surface2); color: var(--text); }
+  .status-menu-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  .right-panel { width: 310px; min-width: 310px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+
+  .stats-bar { padding: 14px 18px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; line-height: 1; }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
+
+  .book-detail { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); min-height: 115px; }
+  .book-detail h2 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--text); margin-bottom: 5px; line-height: 1.3; }
+  .detail-series { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--accent-dim); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; }
+  .detail-note { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; margin-top: 6px; }
+  .no-selection { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-muted); text-align: center; padding: 18px 0; letter-spacing: 1px; }
+  .edit-tip { margin-top: 10px; padding: 8px 10px; background: var(--surface2); border: 1px dashed var(--accent-dim); border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--accent-dim); letter-spacing: 0.5px; }
+
+  .chat-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .chat-header { padding: 10px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .chat-header span { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+  .ai-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+  .quick-asks { padding: 8px 14px 0; display: flex; flex-wrap: wrap; gap: 5px; }
+  .quick-btn { background: var(--surface2); border: 1px solid var(--border2); border-radius: 4px; padding: 4px 9px; color: var(--text-muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; cursor: pointer; letter-spacing: 0.5px; transition: all 0.15s; }
+  .quick-btn:hover { border-color: var(--accent-dim); color: var(--accent); }
+
+  .chat-messages { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .msg { padding: 9px 11px; border-radius: 5px; font-size: 0.81rem; line-height: 1.5; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none} }
+  .msg-ai { background: var(--surface2); color: var(--text); border-left: 2px solid var(--accent-dim); }
+  .msg-user { background: var(--read-bg); color: var(--text-dim); text-align: right; border-right: 2px solid var(--accent-dim); }
+
+  .chat-input-area { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; gap: 7px; }
+  .chat-input { flex: 1; background: var(--surface2); border: 1px solid var(--border2); border-radius: 4px; padding: 8px 11px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; outline: none; transition: border-color 0.2s; }
+  .chat-input:focus { border-color: var(--accent-dim); }
+  .chat-input::placeholder { color: var(--text-muted); }
+  .send-btn { background: var(--accent); border: none; border-radius: 4px; padding: 8px 13px; color: var(--bg); font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; cursor: pointer; transition: background 0.2s; letter-spacing: 1px; }
+  .send-btn:hover { background: var(--accent-bright); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .legend { padding: 8px 16px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 7px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 2px; }
+
+  .typing-indicator { display:flex; gap:4px; align-items:center; padding:2px 0; }
+  .typing-indicator span { width:6px;height:6px;background:var(--accent-dim);border-radius:50%;animation:bounce 1s infinite; }
+  .typing-indicator span:nth-child(2){animation-delay:.15s} .typing-indicator span:nth-child(3){animation-delay:.3s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+  .save-notice { position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--read-bg);border:1px solid var(--accent-dim);color:var(--accent-bright);font-family:'DM Mono',monospace;font-size:0.72rem;padding:8px 18px;border-radius:20px;letter-spacing:1px;pointer-events:none;opacity:0;transition:opacity 0.3s;z-index:999; }
+  .save-notice.show { opacity:1; }
+
+  ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>📚 My Library</h1>
+    <span class="subtitle">Personal Book Tracker</span>
+  </div>
+  <div class="edit-toggle" id="edit-toggle" onclick="toggleEditMode()">
+    <div class="edit-dot"></div>
+    <span id="edit-label">Edit Mode: Off</span>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="author-sidebar">
+    <div class="sidebar-label">Authors</div>
+    <button class="author-btn active" onclick="switchAuthor('baldacci',this)">David Baldacci<small id="count-baldacci"></small></button>
+    <button class="author-btn" onclick="switchAuthor('patterson',this)">James Patterson<small id="count-patterson"></small></button>
+    <button class="author-btn" onclick="switchAuthor('crichton',this)">Michael Crichton<small id="count-crichton"></small></button>
+    <button class="author-btn" onclick="switchAuthor('brown',this)">Dan Brown<small id="count-brown"></small></button>
+    <hr class="sidebar-divider">
+    <button class="author-btn" onclick="switchAuthor('ww2',this)">WW2 History<small id="count-ww2"></small></button>
+    <button class="author-btn" onclick="switchAuthor('other',this)">Other Favourites<small id="count-other"></small></button>
+  </div>
+
+  <div class="book-panel" id="book-panel"></div>
+
+  <div class="right-panel">
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="book-detail" id="book-detail"><div class="no-selection">← Select a book to see details</div></div>
+    <div class="chat-section">
+      <div class="chat-header"><div class="ai-dot"></div><span>Ask about your books</span></div>
+      <div class="quick-asks">
+        <button class="quick-btn" onclick="quickAsk('What should I read next?')">What next?</button>
+        <button class="quick-btn" onclick="quickAsk('How many Baldacci books have I read?')">My stats</button>
+        <button class="quick-btn" onclick="quickAsk('What books am I missing from each Baldacci series?')">Series gaps?</button>
+        <button class="quick-btn" onclick="quickAsk('Recommend something similar to Baldacci that I might enjoy')">Suggestions</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg msg-ai">Hi! I know your full collection across all authors. Ask me "Do I have The Hit?", "Would I enjoy Patterson?", "What WW2 books should I try next?" 📖</div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chat-input" placeholder="Do I own this book?" onkeydown="if(event.key==='Enter')sendMessage()"/>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">ASK</button>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--read)"></div>Read</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--unread)"></div>Owned</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--reading)"></div>Reading</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--notowned)"></div>Not Owned</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--notfound)"></div>Not Found</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--stopped)"></div>Stopped</div>
+    </div>
+  </div>
+</div>
+
+<div class="save-notice" id="save-notice">✓ Saved to browser</div>
+
+<script>
+const defaultLibrary = {
+  baldacci: {
+    author:"David Baldacci",
+    note:"Easy, fast-paced thrillers. Favourite author — very easy reads, always engaging.",
+    series:[
+      { name:"Amos Decker (Memory Man) Series", books:[
+        {num:1,title:"Memory Man",status:"read"},
+        {num:2,title:"The Last Mile",status:"read"},
+        {num:3,title:"The Fix",status:"reading"},
+        {num:4,title:"The Fallen",status:"notowned"},
+        {num:5,title:"Redemption",status:"read"},
+        {num:6,title:"Walk the Wire",status:"unread"},
+        {num:7,title:"Long Shadows",status:"read"},
+      ]},
+      { name:"Atlee Pine Series", books:[
+        {num:1,title:"Long Road to Mercy",status:"read"},
+        {num:2,title:"A Minute to Midnight",status:"unread"},
+        {num:3,title:"Daylight",status:"unread"},
+        {num:4,title:"Mercy",status:"notowned"},
+      ]},
+      { name:"Aloysius Archer Series", books:[
+        {num:1,title:"One Good Deed",status:"unread"},
+        {num:2,title:"A Gambling Man",status:"unread"},
+        {num:3,title:"Dream Town",status:"notowned"},
+      ]},
+      { name:"Travis Devine Series", books:[
+        {num:1,title:"The 6:20 Man",status:"read"},
+        {num:2,title:"The Edge",status:"notowned"},
+        {num:3,title:"To Die For",status:"notowned"},
+      ]},
+      { name:"Will Robie Series", books:[
+        {num:1,title:"The Innocent",status:"read"},
+        {num:2,title:"The Hit",status:"notowned"},
+        {num:3,title:"The Target",status:"notowned"},
+        {num:4,title:"The Guilty",status:"unread"},
+        {num:5,title:"End Game",status:"notowned"},
+      ]},
+      { name:"John Puller Series", books:[
+        {num:1,title:"Zero Day",status:"notowned"},
+        {num:2,title:"The Forgotten",status:"notowned"},
+        {num:3,title:"The Escape",status:"read"},
+        {num:4,title:"No Man's Land",status:"notowned"},
+      ]},
+      { name:"Sean King & Michelle Maxwell Series", books:[
+        {num:1,title:"Split Second",status:"unread"},
+        {num:2,title:"Hour Game",status:"unread"},
+        {num:3,title:"Simple Genius",status:"notowned"},
+        {num:4,title:"First Family",status:"notowned"},
+        {num:5,title:"The Sixth Man",status:"unread"},
+        {num:6,title:"King and Maxwell",status:"notowned"},
+      ]},
+      { name:"The Camel Club Series", books:[
+        {num:1,title:"The Camel Club",status:"notowned"},
+        {num:2,title:"The Collectors",status:"notowned"},
+        {num:3,title:"Stone Cold",status:"unread"},
+        {num:4,title:"Divine Justice",status:"notowned"},
+        {num:5,title:"Hell's Corner",status:"notowned"},
+      ]},
+      { name:"Walter Nash Series (New)", books:[
+        {num:1,title:"Nash Falls (Nov 2025)",status:"notowned"},
+        {num:2,title:"Hope Rises (Apr 2026)",status:"notowned"},
+      ]},
+      { name:"Standalone & Others", books:[
+        {title:"A Calamity of Souls",status:"unread"},
+        {title:"Simply Lies",status:"unread"},
+        {title:"Find You First",status:"unread"},
+        {title:"Deliver Us From Evil",status:"unread"},
+        {title:"Strangers in Time (Apr 2025)",status:"notowned"},
+      ]},
+    ]
+  },
+
+  patterson: {
+    author:"James Patterson",
+    note:"Fast-paced crime thrillers, very similar style to Baldacci — easy reads. Wife has Obsessed (#15 Michael Bennett). Recommended to start from Book 1.",
+    series:[
+      { name:"Michael Bennett Series", books:[
+        {num:1,title:"Step on a Crack",status:"notowned",note:"Start here — great introduction to Bennett"},
+        {num:2,title:"Run for Your Life",status:"notowned"},
+        {num:3,title:"Worst Case",status:"notowned"},
+        {num:4,title:"Tick Tock",status:"notowned"},
+        {num:5,title:"I, Michael Bennett",status:"notowned"},
+        {num:6,title:"Gone",status:"notowned"},
+        {num:7,title:"Burn",status:"notowned"},
+        {num:8,title:"Alert",status:"notowned"},
+        {num:9,title:"Bullseye",status:"notowned"},
+        {num:10,title:"Haunted",status:"notowned"},
+        {num:11,title:"Ambush",status:"notowned"},
+        {num:12,title:"Blindside",status:"notowned"},
+        {num:13,title:"The Russian",status:"notowned"},
+        {num:14,title:"Shattered",status:"notowned"},
+        {num:15,title:"Obsessed",status:"unread",note:"Wife's book — a good standalone entry point too"},
+        {num:16,title:"Crosshairs",status:"notowned"},
+        {num:17,title:"Paranoia",status:"notowned"},
+        {num:18,title:"Delusional (2026)",status:"notowned"},
+      ]},
+    ]
+  },
+
+  crichton: {
+    author:"Michael Crichton",
+    note:"Sci-fi / techno-thriller. Loves world-building and concept-driven stories.",
+    series:[
+      { name:"Owned", books:[
+        {title:"Sphere",status:"unread"},
+        {title:"Timeline",status:"unread"},
+        {title:"Jurassic Park",status:"notfound",note:"Read but book is missing — may be The Lost World?"},
+      ]},
+      { name:"Not Owned", books:[
+        {title:"The Lost World",status:"notowned"},
+        {title:"Congo",status:"notowned"},
+        {title:"The Andromeda Strain",status:"notowned"},
+        {title:"Disclosure",status:"notowned"},
+        {title:"Rising Sun",status:"notowned"},
+        {title:"The Great Train Robbery",status:"notowned"},
+        {title:"Eaters of the Dead",status:"notowned"},
+        {title:"Next",status:"notowned"},
+      ]},
+    ]
+  },
+
+  brown: {
+    author:"Dan Brown",
+    note:"All books read and owned except Origin.",
+    series:[
+      { name:"Robert Langdon Series", books:[
+        {num:1,title:"Angels & Demons",status:"read"},
+        {num:2,title:"The Da Vinci Code",status:"read"},
+        {num:3,title:"The Lost Symbol",status:"read"},
+        {num:4,title:"Inferno",status:"read"},
+        {num:5,title:"Origin",status:"notowned"},
+      ]},
+      { name:"Standalone", books:[
+        {title:"Digital Fortress",status:"read"},
+        {title:"Deception Point",status:"read"},
+      ]},
+    ]
+  },
+
+  ww2: {
+    author:"WW2 History & Non-Fiction",
+    note:"Loves narrative non-fiction about real WW2 stories — personal, human-driven accounts. The Boys in the Boat style: gripping true stories set against the backdrop of the war era.",
+    series:[
+      { name:"Read", books:[
+        {title:"The Pathfinders",status:"read",note:"By Will Iredale — elite RAF bombers who led raids over occupied Europe"},
+        {title:"The Boys in the Boat",status:"read",note:"By Daniel James Brown — US Olympic rowing team defeat Nazi Germany at 1936 Berlin Olympics. The forgotten book you loved!"},
+      ]},
+      { name:"Suggested — Similar Style", books:[
+        {title:"Unbroken",status:"notowned",note:"By Laura Hillenbrand — US Olympic runner survives POW camps. Very similar to Boys in the Boat"},
+        {title:"The Splendid and the Vile",status:"notowned",note:"By Erik Larson — Churchill and his family during the Blitz. Gripping narrative non-fiction"},
+        {title:"Beneath a Scarlet Sky",status:"notowned",note:"By Mark Sullivan — true story of a young Italian spy helping Jews escape the Nazis"},
+        {title:"Dead Wake",status:"notowned",note:"By Erik Larson — the sinking of the Lusitania, told as a thriller"},
+        {title:"The Bomber Mafia",status:"notowned",note:"By Malcolm Gladwell — the WW2 strategic bombing campaign, fast and readable"},
+      ]},
+    ]
+  },
+
+  other: {
+    author:"Other Favourites",
+    note:"Epic fantasy, sci-fi, and philosophical classics.",
+    series:[
+      { name:"J.R.R. Tolkien", books:[
+        {title:"The Hobbit",status:"read"},
+        {title:"The Lord of the Rings",status:"read"},
+      ]},
+      { name:"Frank Herbert", books:[
+        {title:"Dune",status:"read"},
+      ]},
+      { name:"Ayn Rand", books:[
+        {title:"The Fountainhead",status:"read",note:"Loved it!"},
+        {title:"Atlas Shrugged",status:"stopped",note:"Owned but couldn't get into it — too dense."},
+      ]},
+    ]
+  }
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+function loadLibrary() {
+  try { const s = localStorage.getItem('myBookLibrary_v3'); if(s) return JSON.parse(s); } catch(e){}
+  return JSON.parse(JSON.stringify(defaultLibrary));
+}
+function saveLibrary() {
+  try { localStorage.setItem('myBookLibrary_v3', JSON.stringify(library)); showSaveNotice(); } catch(e){}
+}
+
+let library = loadLibrary();
+let currentAuthor = 'baldacci';
+let editMode = false;
+let activeMenu = null;
+
+const STATUS = {
+  read:     {label:'Read ✓',    cls:'badge-read',     color:'var(--read)'},
+  unread:   {label:'Owned',     cls:'badge-unread',   color:'var(--unread)'},
+  notowned: {label:'Not Owned', cls:'badge-notowned', color:'var(--notowned)'},
+  reading:  {label:'Reading…',  cls:'badge-reading',  color:'var(--reading)'},
+  stopped:  {label:'Stopped',   cls:'badge-stopped',  color:'var(--stopped)'},
+  notfound: {label:'Not Found', cls:'badge-notfound', color:'var(--notfound)'},
+};
+
+function renderBooks() {
+  const data = library[currentAuthor];
+  const panel = document.getElementById('book-panel');
+  let html = '';
+  data.series.forEach((series, si) => {
+    html += `<div class="series-block"><div class="series-title">${series.name}<span class="series-count">${series.books.length} books</span></div>`;
+    series.books.forEach((book, bi) => {
+      const numStr = book.num!=null ? `<span class="book-num">#${book.num}</span>` : `<span class="book-num"></span>`;
+      const tc = book.status==='notowned' ? 'book-title notowned' : 'book-title';
+      const bc = STATUS[book.status]?.cls || 'badge-notowned';
+      const bl = STATUS[book.status]?.label || book.status;
+      html += `<div class="book-item" id="bi-${si}-${bi}" onclick="selectBook(${si},${bi})">
+        ${numStr}<span class="${tc}">${book.title}</span>
+        <span class="status-badge ${bc}" onclick="badgeClick(event,${si},${bi})">${bl}</span>
+        <div class="status-menu" id="menu-${si}-${bi}" style="display:none"></div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  panel.innerHTML = html;
+  panel.classList.toggle('edit-mode', editMode);
+  renderStats();
+  updateCounts();
+}
+
+function renderStats() {
+  const data = library[currentAuthor];
+  let read=0, owned=0, notowned=0;
+  data.series.forEach(s=>s.books.forEach(b=>{
+    if(['read','reading','notfound'].includes(b.status)) read++;
+    else if(['unread','stopped'].includes(b.status)) owned++;
+    else notowned++;
+  }));
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-item"><div class="stat-num" style="color:var(--read)">${read}</div><div class="stat-label">Read</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:var(--unread)">${owned}</div><div class="stat-label">To Read</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:var(--notowned)">${notowned}</div><div class="stat-label">Not Owned</div></div>`;
+}
+
+function updateCounts() {
+  Object.entries(library).forEach(([key,data]) => {
+    let t=0; data.series.forEach(s=>t+=s.books.length);
+    const el=document.getElementById('count-'+key);
+    if(el) el.textContent=`${t} books tracked`;
+  });
+}
+
+function selectBook(si, bi) {
+  const book = library[currentAuthor].series[si].books[bi];
+  const series = library[currentAuthor].series[si];
+  document.querySelectorAll('.book-item').forEach(el=>el.classList.remove('selected'));
+  const el = document.getElementById(`bi-${si}-${bi}`);
+  if(el) el.classList.add('selected');
+
+  const hints = {
+    notowned:`<div class="detail-note" style="color:var(--notowned)">📍 Not in your collection — look out for this one!</div>`,
+    unread:`<div class="detail-note">📚 You own this — add it to your reading pile!</div>`,
+    reading:`<div class="detail-note" style="color:var(--reading)">🔖 Currently reading this one.</div>`,
+    read:`<div class="detail-note" style="color:var(--read)">✅ Finished!</div>`,
+    stopped:`<div class="detail-note" style="color:var(--stopped)">⏸ Started but put it down.</div>`,
+    notfound:`<div class="detail-note" style="color:var(--notfound)">🔍 Read it, but can't find the physical book.</div>`,
+  };
+  const editTip = editMode ? `<div class="edit-tip">✏️ Click any status badge to change it</div>` : '';
+  const bc = STATUS[book.status]?.cls || 'badge-notowned';
+  const bl = STATUS[book.status]?.label || book.status;
+
+  document.getElementById('book-detail').innerHTML = `
+    <h2>${book.title}</h2>
+    <div class="detail-series">${series.name}${book.num?' · Book #'+book.num:''}</div>
+    <span class="status-badge ${bc}" style="margin-bottom:8px;display:inline-block">${bl}</span>
+    ${book.note?`<div class="detail-note">${book.note}</div>`:''}
+    ${hints[book.status]||''}
+    ${editTip}`;
+}
+
+function toggleEditMode() {
+  editMode = !editMode;
+  document.getElementById('edit-toggle').classList.toggle('active', editMode);
+  document.getElementById('edit-label').textContent = editMode ? 'Edit Mode: On' : 'Edit Mode: Off';
+  closeMenu(); renderBooks();
+}
+
+function badgeClick(e, si, bi) {
+  e.stopPropagation();
+  if(!editMode) { selectBook(si,bi); return; }
+  const menuId = `menu-${si}-${bi}`;
+  if(activeMenu===menuId) { closeMenu(); return; }
+  closeMenu();
+  activeMenu = menuId;
+  const menu = document.getElementById(menuId);
+  menu.innerHTML = Object.entries(STATUS).map(([s,info])=>`
+    <div class="status-menu-item" onclick="changeStatus(event,${si},${bi},'${s}')">
+      <div class="status-menu-dot" style="background:${info.color}"></div>${info.label}
+    </div>`).join('');
+  menu.style.display = 'block';
+  selectBook(si, bi);
+}
+
+function changeStatus(e, si, bi, newStatus) {
+  e.stopPropagation();
+  library[currentAuthor].series[si].books[bi].status = newStatus;
+  saveLibrary(); closeMenu(); renderBooks(); selectBook(si, bi);
+}
+
+function closeMenu() {
+  if(activeMenu) { const m=document.getElementById(activeMenu); if(m) m.style.display='none'; activeMenu=null; }
+}
+document.addEventListener('click', closeMenu);
+
+function switchAuthor(key, btn) {
+  currentAuthor = key;
+  document.querySelectorAll('.author-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('book-detail').innerHTML='<div class="no-selection">← Select a book to see details</div>';
+  closeMenu(); renderBooks();
+}
+
+function showSaveNotice() {
+  const el=document.getElementById('save-notice');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2200);
+}
+
+function buildContext() {
+  let ctx = "You are a friendly personal book assistant. Here is the user's complete library:\n\n";
+  ctx += "READING PROFILE: Loves easy, fast-paced thrillers (Baldacci is their favourite — says they're 'easy reads'). Also enjoys epic world-building (Tolkien, Dune), real WW2 narrative non-fiction (loved The Boys in the Boat and The Pathfinders), and thought-provoking classics (loved Fountainhead, couldn't finish Atlas Shrugged).\n\n";
+  Object.entries(library).forEach(([,data])=>{
+    ctx+=`AUTHOR: ${data.author}\nProfile: ${data.note}\n`;
+    data.series.forEach(s=>{
+      ctx+=`  Series: ${s.name}\n`;
+      s.books.forEach(b=>{ ctx+=`    - ${b.title}${b.num?' (#'+b.num+')':''}: ${b.status.toUpperCase()}${b.note?' — '+b.note:''}\n`; });
+    });
+    ctx+='\n';
+  });
+  ctx+=`Status key: READ=finished, UNREAD=owned/not read, NOTOWNED=doesn't own, READING=currently reading, STOPPED=gave up, NOTFOUND=read but book missing.\n`;
+  ctx+=`\nBe concise and practical. They may be in a shop. Answer ownership questions directly. Suggest next reads based on their taste profile.`;
+  return ctx;
+}
+
+async function sendMessage() {
+  const input=document.getElementById('chat-input');
+  const msg=input.value.trim(); if(!msg) return;
+  input.value='';
+  const el=document.getElementById('chat-messages');
+  el.innerHTML+=`<div class="msg msg-user">${msg}</div>`;
+  const tid='t'+Date.now();
+  el.innerHTML+=`<div class="msg msg-ai" id="${tid}"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+  el.scrollTop=el.scrollHeight;
+  document.getElementById('send-btn').disabled=true;
+  try {
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:buildContext(),messages:[{role:"user",content:msg}]})
+    });
+    const data=await res.json();
+    document.getElementById(tid).textContent=data.content?.[0]?.text||"Sorry, no response.";
+  } catch(e) { document.getElementById(tid).textContent="Connection error — please try again."; }
+  document.getElementById('send-btn').disabled=false;
+  el.scrollTop=el.scrollHeight;
+}
+
+function quickAsk(q) { document.getElementById('chat-input').value=q; sendMessage(); }
+
+renderBooks();
+</script>
+</body>
+</html>
 
